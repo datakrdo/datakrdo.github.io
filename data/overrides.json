@@ -1,0 +1,61 @@
+{
+  "lyric-emotion": {
+    "title": "Lyric Emotion",
+    "description_es": "Análisis fino de emociones en letras de canciones: ModernBERT ajustado (28 emociones + VAD) evaluado sobre un conjunto de referencia anotado a mano y aplicado a The Cure vs The Smiths",
+    "image": "docs/img/hero.png",
+    "category": "NLP",
+    "symbol": "tear"
+  },
+  "monte-hermoso-tree-analysis": {
+    "title": "Monte Hermoso Tree Analysis",
+    "description_es": "Cambio de cobertura leñosa en Monte Hermoso y Sauce Grande (Argentina), 1985-2026: Landsat/Sentinel-2 en Google Earth Engine, solo datos abiertos, mapa interactivo con comparación de fechas",
+    "category": "Geospatial",
+    "hidden": true
+  },
+  "sti-surveillance": {
+    "title": "STI Surveillance",
+    "description_es": "Vigilancia de ITS en EE. UU.: pipeline semanal CDC NNDSS + Censo (Neon, dbt), modelo compuesto de Power BI con RLS/OLS, demo estática gratuita y MCP remoto de solo lectura",
+    "image": "docs/img/report_en.gif",
+    "image_es": "docs/img/report_es.gif",
+    "category": "Power BI / MCP",
+    "symbol": "eye"
+  },
+  "vigilancia-respiratoria-ar": {
+    "title": "Vigilancia Respiratoria AR",
+    "description_es": "Vigilancia epidemiológica de infecciones respiratorias en Argentina (SNVS 2.0): dbt sobre Databricks, sitio bilingüe en Observable",
+    "category": "Analytics Engineering",
+    "homepage": "https://datakrdo.github.io/vigilancia-respiratoria-ar/",
+    "screenshot": "https://datakrdo.github.io/vigilancia-respiratoria-ar/en/",
+    "screenshot_es": "https://datakrdo.github.io/vigilancia-respiratoria-ar/",
+    "screenshot_scroll": "#map-by-department",
+    "screenshot_scroll_es": "#mapa-por-departamento",
+    "symbol": "eye"
+  },
+  "shearer-goal-analysis": {
+    "title": "Shearer Goal Analysis",
+    "description_es": "Análisis de los goles de Alan Shearer en la Premier League, ajustado por era y totalmente referenciado: pipeline R con targets, validación con pointblank, dashboard Shiny, bilingüe EN/ES",
+    "category": "Data Pipeline (R)",
+    "screenshot": "https://8o0sz0-federico-dignani.shinyapps.io/shearer-260/",
+    "symbol": "plunger"
+  },
+  "credit-card-fraud-detection": {
+    "title": "Credit Card Fraud Detection",
+    "description_es": "Detección de fraude con tarjeta sobre 1,85 M de transacciones Sparkov: partición temporal, variables de velocidad causales, calibración y umbral basado en costos, bilingüe EN/ES",
+    "category": "Machine Learning",
+    "symbol": "tear"
+  },
+  "pbc-stage-prediction": {
+    "title": "PBC Stage Prediction",
+    "description_es": "Estadificación no invasiva de colangitis biliar primaria (cohorte Mayo Clinic, 1974-84): pipeline sin fuga de datos, CV anidada, comparación con los puntajes Mayo y APRI, umbral de descarte, demo en Streamlit, bilingüe EN/ES",
+    "category": "Machine Learning",
+    "hidden": true
+  },
+  "agro-monitor-pampa": {
+    "title": "Agro Monitor Pampa",
+    "category": "Geospatial",
+    "description_es": "Monitoreo de soja en campaña en la Pampa argentina: NDVI de Sentinel-2 vía openEO con máscaras de cultivo del INTA, modelo de rendimiento leave-one-campaign-out, sitio estático SvelteKit + MapLibre, bilingüe EN/ES",
+    "homepage": "https://agro-monitor-pampa.pages.dev",
+    "screenshot": "https://agro-monitor-pampa.pages.dev",
+    "symbol": "eye"
+  }
+}
