@@ -38,6 +38,7 @@
 @media(hover:none){.button:hover,.icon-button:hover,.project-card:hover{transform:none}}
 .skip-link{position:fixed;top:.5rem;left:.5rem;z-index:200;padding:var(--s3) var(--s5);color:var(--inverse);background:var(--text);border-radius:999px;font-size:var(--sm);font-weight:700;transform:translateY(-200%)}.skip-link:focus{transform:none}
 .section-title,.gatefold-title,.contact-title,.project-title{font-weight:800;letter-spacing:-.03em;line-height:1.08}.section-title{max-width:16ch;font-size:clamp(1.9rem,1.3rem + 2.4vw,3.1rem)}.gatefold-title{max-width:12ch;font-size:clamp(1.9rem,1.3rem + 2.4vw,3.1rem)}.contact-title{max-width:16ch;font-size:clamp(2.3rem,1.4rem + 4vw,4.6rem)}.section-title::after,.gatefold-title::after,.contact-title::after{content:"";display:block;width:min(60%,12rem);height:3px;margin-top:var(--s4);border-radius:2px;background:linear-gradient(90deg,var(--red),var(--orange),var(--yellow),var(--green),var(--blue),var(--violet))}.contact-title::after{margin-inline:auto}.intro-statement{font-weight:600;letter-spacing:-.02em;line-height:1.4}
+@supports (grid-template-rows:subgrid){.project-card{display:grid;grid-row:span 6;grid-template-rows:subgrid;row-gap:0}.project-content,.project-content>div{display:contents}.project-number,.project-title,.project-description,.project-tags{margin-inline:var(--s6)}.project-number{margin-top:var(--s6);letter-spacing:.04em;white-space:nowrap}.project-description{margin-bottom:var(--s5)}.project-tags{align-content:start}.project-tags:last-child{margin-bottom:var(--s6)}}
 </style>
 </head>
 <body>
