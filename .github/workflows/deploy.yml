@@ -25,6 +25,20 @@ jobs:
           node-version: 22
       - name: Install ffmpeg
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Screenshot cache key
+        id: shots
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # screenshot settings + last push of every repo whose site is captured: a change in either retakes the pictures
+          sites=$(jq -r 'to_entries[] | select(.value.hidden != true) | select(.value | tostring | test("\"screenshot")) | .key' data/overrides.json)
+          cfg=$(jq -S 'map_values(del(.case, .case_es, .description, .description_es, .title, .category, .filters))' data/overrides.json)
+          pushed=$(for n in $sites; do gh api "repos/${{ github.repository_owner }}/$n" --jq .pushed_at; done)
+          echo "key=shots-${{ hashFiles('scripts/fetch-projects.sh', 'scripts/screenshot.mjs') }}-$(echo "$cfg$pushed" | sha1sum | cut -c1-16)" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        with:
+          path: data/img
+          key: ${{ steps.shots.outputs.key }}
       - name: Fetch portfolio repos
         env:
           GH_TOKEN: ${{ github.token }}

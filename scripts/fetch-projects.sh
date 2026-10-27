@@ -7,6 +7,7 @@
 #   screenshot / screenshot_es  live URL, captured once per theme (light + dark)
 #   screenshot_scroll / screenshot_scroll_es  CSS selector to scroll to before capturing (lazy-rendered charts)
 #   hidden                    true = leave the project out
+# Screenshots already present in data/img are reused (the deploy restores them from a cache); FORCE=1 retakes them all.
 set -euo pipefail
 USER_LOGIN="${1:-datakrdo}"
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
@@ -33,6 +34,7 @@ query($q: String!) {
 images='{}'
 ov() { jq -r --arg n "$1" --arg k "$2" '.[$n][$k] // empty' "$DATA/overrides.json"; }
 add() { images=$(jq --arg n "$1" --arg l "$2" --arg t "$3" --arg f "data/img/$4" '.[$n][$l][$t]=$f' <<<"$images"); }
+cached() { [ -z "${FORCE:-}" ] && [ -s "$1" ]; }
 shrink() { # <in> <out>: max 960 px wide; GIFs keep their animation at reduced size
   case "$2" in
     *.gif) ffmpeg -y -loglevel error -i "$1" -vf "fps=8,scale='min(720,iw)':-2:flags=lanczos,split[a][b];[a]palettegen[p];[b][p]paletteuse" "$2" ;;
@@ -58,6 +60,7 @@ for name in $(jq -r '.[].name' "$DATA/projects.json"); do
     elif [ -n "$url" ]; then
       for theme in light dark; do
         out="$name-$lang-$theme.png"
+        if cached "$DATA/img/$out"; then add "$name" "$lang" "$theme" "$out"; continue; fi
         if node "$HERE/scripts/screenshot.mjs" "$url" 1280 853 14000 "$DATA/img/$out.raw" "$theme" "$(ov "$name" "screenshot_scroll$sfx")" \
            && shrink "$DATA/img/$out.raw" "$DATA/img/$out"; then add "$name" "$lang" "$theme" "$out"
         else echo "screenshot failed: $url ($theme)" >&2; fi
@@ -92,6 +95,9 @@ for name in $(jq -r '.[].name' "$DATA/projects.json"); do
         rm -f "$DATA/img/$base.raw"
       elif [ -n "$url" ]; then
         for theme in light dark; do
+          if cached "$DATA/img/$base-$theme.png"; then
+            [ "$theme" = light ] && light="data/img/$base-light.png" || dark="data/img/$base-dark.png"; continue
+          fi
           if node "$HERE/scripts/screenshot.mjs" "$url" 1280 853 14000 "$DATA/img/$base-$theme.raw" "$theme" "$(gk scroll)" \
              && shrinkg "$DATA/img/$base-$theme.raw" "$DATA/img/$base-$theme.png"; then
             [ "$theme" = light ] && light="data/img/$base-light.png" || dark="data/img/$base-dark.png"
