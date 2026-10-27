@@ -1,11 +1,61 @@
 {
   "lyric-emotion": {
     "title": "Lyric Emotion",
-    "description_es": "Análisis de emociones en letras con ModernBERT ajustado (28 emociones + VAD), aplicado a The Cure vs The Smiths",
+    "description_es": "Lee las emociones en letras de canciones y compara a The Cure con The Smiths.",
     "image": "docs/img/hero.png",
     "category": "NLP",
     "symbol": "tear",
-    "description": "Emotion analysis of song lyrics with a fine-tuned ModernBERT (28 emotions + VAD), applied to The Cure vs The Smiths"
+    "description": "Reads the emotions in song lyrics, comparing The Cure and The Smiths.",
+    "case": {
+      "problem": "Did The Cure and The Smiths sound different, emotionally, or is “miserable” just a reputation? Casual descriptions flatten both bands.",
+      "approach": "A fine-tuned ModernBERT with 28 emotions plus a valence/arousal/dominance head, trained on redistributable corpora and adapted to lyrics with weakly-labelled data. Validation against a hand-annotated gold set of 80 songs is still pending.",
+      "result": "An interactive site with two spinning records, one per band, to compare emotions. Results are labelled provisional and benchmarked against off-the-shelf baselines, including where the model does not beat them.",
+      "details": [
+        "Its own model rather than an off-the-shelf classifier: 28 GoEmotions labels plus continuous valence, arousal and dominance.",
+        "Adapted to the lyrics domain with weakly-labelled datasets (MoodyLyrics, Deezer DMDD).",
+        "Honest benchmarks: a public emotion model edges it out on the GoEmotions test split (0.5531 vs 0.5127 macro F1), while its VAD head clearly beats the NRC-VAD lexicon baseline.",
+        "Results stay provisional until the 80-song gold set is annotated, with guidelines fixed beforehand."
+      ]
+    },
+    "case_es": {
+      "problem": "¿The Cure y The Smiths sonaban distinto, emocionalmente, o “miserable” es solo una fama? Las descripciones casuales aplanan a las dos bandas.",
+      "approach": "Un ModernBERT ajustado con 28 emociones más una cabeza de valencia/activación/dominancia, entrenado con corpus redistribuibles y adaptado a letras con datos de etiquetado débil. La validación contra un conjunto de referencia de 80 canciones anotadas a mano sigue pendiente.",
+      "result": "Un sitio interactivo con dos discos giratorios, uno por banda, para comparar emociones. Los resultados figuran como provisorios y se miden contra modelos de referencia, incluso donde el modelo no los supera.",
+      "details": [
+        "Un modelo propio y no un clasificador listo para usar: 28 etiquetas de GoEmotions más valencia, activación y dominancia continuas.",
+        "Adaptado al dominio de letras con datasets de etiquetado débil (MoodyLyrics, Deezer DMDD).",
+        "Evaluación honesta: un modelo público de emociones lo supera en el test de GoEmotions (0,5531 vs 0,5127 de F1 macro), mientras que su cabeza VAD le gana con claridad a la línea de base léxica NRC-VAD.",
+        "Los resultados siguen siendo provisorios hasta anotar el conjunto de referencia de 80 canciones, con guías fijadas de antemano."
+      ]
+    },
+    "filters": {
+      "type": [
+        "ml"
+      ],
+      "sector": "music"
+    },
+    "gallery": [
+      {
+        "src": "docs/img/albums.png",
+        "caption": "Album by album: where each album sits on the brightness scale, The Cure and The Smiths.",
+        "caption_es": "Álbum por álbum: dónde cae cada disco en la escala de brillo, The Cure y The Smiths."
+      },
+      {
+        "src": "output/figures/emotion_distribution.png",
+        "caption": "Emotion distribution by artist.",
+        "caption_es": "Distribución de emociones por artista."
+      },
+      {
+        "src": "output/figures/valence_timeseries.png",
+        "caption": "Valence by year, with 95% bootstrap intervals.",
+        "caption_es": "Valencia por año, con intervalos bootstrap del 95 %."
+      },
+      {
+        "src": "output/figures/emotion_heatmap.png",
+        "caption": "Mean probability of each emotion, album by album.",
+        "caption_es": "Probabilidad media de cada emoción, álbum por álbum."
+      }
+    ]
   },
   "monte-hermoso-tree-analysis": {
     "title": "Monte Hermoso Tree Analysis",
@@ -15,16 +65,53 @@
   },
   "sti-surveillance": {
     "title": "STI Surveillance",
-    "description_es": "Vigilancia de ITS en EE. UU.: pipeline semanal CDC NNDSS + Censo (dbt), modelo Power BI con RLS y MCP de solo lectura",
+    "description_es": "Un tablero semanal de infecciones de transmisión sexual en EE. UU., armado con datos públicos del CDC.",
     "image": "docs/img/report_en.gif",
     "image_es": "docs/img/report_es.gif",
     "category": "Power BI / MCP",
     "symbol": "eye",
-    "description": "US STI surveillance: weekly CDC NNDSS + Census pipeline (dbt), Power BI model with RLS and a read-only MCP"
+    "description": "A weekly dashboard of sexually transmitted infections in the US, built from public CDC data.",
+    "case": {
+      "problem": "Can an AI assistant answer questions about STI surveillance data using the same governed model that feeds a Power BI report?",
+      "approach": "A weekly pipeline from CDC NNDSS, Oregon reportable-disease data and Census into Postgres (Neon), modelled in dbt as a star schema. On top: a 7-page Power BI composite model with row- and object-level security, and a read-only MCP server over the same tables.",
+      "result": "A seven-page report with an accessible dark theme and a free static demo of the MCP, all on free public sources. Gaps are shown: masked cells stay empty and suppression rules are stated.",
+      "details": [
+        "Composite model: two facts in DirectQuery against Neon, five Dual dimensions and a small Import aggregation for the national weekly views.",
+        "Row-level security maps each sign-in to a state or county; an unknown user sees nothing.",
+        "Object-level security: restricted roles cannot read race, age or demographic tables, and the Demographics page says so instead of failing.",
+        "Rates are annualised per 100,000, masked cells stay empty and the Oregon pages state the suppression rule (fewer than 6 cases)."
+      ]
+    },
+    "case_es": {
+      "problem": "¿Puede un asistente de IA responder preguntas sobre vigilancia de ITS con el mismo modelo gobernado que alimenta un reporte de Power BI?",
+      "approach": "Un pipeline semanal desde CDC NNDSS, datos de enfermedades de notificación de Oregon y el Censo hacia Postgres (Neon), modelado en dbt como esquema en estrella. Encima: un modelo compuesto de Power BI de 7 páginas con seguridad por filas y por objetos, y un servidor MCP de solo lectura sobre las mismas tablas.",
+      "result": "Un reporte de siete páginas con tema oscuro accesible y una demo estática gratuita del MCP, todo sobre fuentes públicas gratuitas. Los vacíos se muestran: las celdas enmascaradas quedan vacías y se declaran las reglas de supresión.",
+      "details": [
+        "Modelo compuesto: dos hechos en DirectQuery contra Neon, cinco dimensiones Dual y una pequeña agregación Import para las vistas semanales nacionales.",
+        "La seguridad por filas asigna cada inicio de sesión a un estado o condado; un usuario desconocido no ve nada.",
+        "Seguridad por objetos: los roles restringidos no pueden leer raza, edad ni tablas demográficas, y la página Demografía lo avisa en lugar de fallar.",
+        "Las tasas se anualizan por 100.000, las celdas enmascaradas quedan vacías y las páginas de Oregon declaran la regla de supresión (menos de 6 casos)."
+      ]
+    },
+    "filters": {
+      "type": [
+        "bi",
+        "pipelines"
+      ],
+      "sector": "health"
+    },
+    "gallery": [
+      {
+        "src": "docs/img/cover_en.gif",
+        "src_es": "docs/img/cover_es.gif",
+        "caption": "Cover page of the Power BI report.",
+        "caption_es": "Portada del reporte de Power BI."
+      }
+    ]
   },
   "vigilancia-respiratoria-ar": {
     "title": "Vigilancia Respiratoria AR",
-    "description_es": "Vigilancia de infecciones respiratorias en Argentina (SNVS 2.0): dbt sobre Databricks y sitio en Observable",
+    "description_es": "Sigue las infecciones respiratorias en Argentina a partir del sistema nacional de vigilancia.",
     "category": "Analytics Engineering",
     "homepage": "https://datakrdo.github.io/vigilancia-respiratoria-ar/",
     "screenshot": "https://datakrdo.github.io/vigilancia-respiratoria-ar/en/",
@@ -32,24 +119,154 @@
     "screenshot_scroll": "#map-by-department",
     "screenshot_scroll_es": "#mapa-por-departamento",
     "symbol": "eye",
-    "description": "Respiratory infection surveillance in Argentina (SNVS 2.0): dbt on Databricks and an Observable site"
+    "description": "Tracks respiratory infections across Argentina from the national surveillance system.",
+    "case": {
+      "problem": "Respiratory infections generate about 1.3 million notifications a year in Argentina's SNVS 2.0, but the raw releases overlap and carry quality issues, which makes seasons hard to compare.",
+      "approach": "dbt on Databricks (Unity Catalog, serverless SQL) with a documented data profile, and SQL analyses of season timing, geographic spread, early-warning lead time and hotspot concentration, ranked per 100k population.",
+      "result": "A bilingual public site (Observable) fed by a weekly self-updating dataset. It reports a negative result too: seasons do not travel north to south, and the early-warning rule catches about 1 in 5 outbreaks, with a median 6-week lead.",
+      "details": [
+        "Ranked by excess cases per 100,000 population, so big provinces don't top the list just for being big.",
+        "Population-weighted Gini and top-decile overlap separate concentration of risk from concentration of people.",
+        "The early-warning rule has recall near 20% (105 of 528 outbreaks) and precision near 35%, with a median 6-week lead: a review flag, not a standalone alert.",
+        "A full data profile documents the overlapping releases and the quality issues found."
+      ]
+    },
+    "case_es": {
+      "problem": "Las infecciones respiratorias generan unas 1,3 millones de notificaciones al año en el SNVS 2.0 de Argentina, pero las publicaciones crudas se superponen y tienen problemas de calidad, lo que dificulta comparar temporadas.",
+      "approach": "dbt sobre Databricks (Unity Catalog, SQL serverless) con un perfil de datos documentado, y análisis en SQL del momento de la temporada, la dispersión geográfica, el tiempo de anticipación de alertas y la concentración de focos, ordenados por 100 mil habitantes.",
+      "result": "Un sitio público bilingüe (Observable) alimentado por un dataset que se actualiza solo cada semana. También informa un resultado negativo: las temporadas no viajan de norte a sur, y la regla de alerta temprana detecta cerca de 1 de cada 5 brotes, con una anticipación mediana de 6 semanas.",
+      "details": [
+        "Ordenado por casos en exceso cada 100.000 habitantes, para que las provincias grandes no encabecen la lista solo por serlo.",
+        "El Gini ponderado por población y la superposición del decil superior separan la concentración del riesgo de la concentración de personas.",
+        "La regla de alerta temprana tiene una sensibilidad cercana al 20 % (105 de 528 brotes) y una precisión cercana al 35 %, con una anticipación mediana de 6 semanas: una señal para revisar, no una alerta independiente.",
+        "Un perfil completo de los datos documenta las publicaciones superpuestas y los problemas de calidad encontrados."
+      ]
+    },
+    "filters": {
+      "type": [
+        "pipelines"
+      ],
+      "sector": "health"
+    },
+    "gallery": [
+      {
+        "screenshot": "https://datakrdo.github.io/vigilancia-respiratoria-ar/en/",
+        "screenshot_es": "https://datakrdo.github.io/vigilancia-respiratoria-ar/",
+        "caption": "Top of the site: where the risk is, not just where the cases are.",
+        "caption_es": "Inicio del sitio: dónde está el riesgo, no solo dónde están los casos."
+      },
+      {
+        "screenshot": "https://datakrdo.github.io/vigilancia-respiratoria-ar/en/",
+        "screenshot_es": "https://datakrdo.github.io/vigilancia-respiratoria-ar/",
+        "scroll": "#rate-by-province",
+        "scroll_es": "#tasa-por-provincia",
+        "caption": "Rate by province.",
+        "caption_es": "Tasa por provincia."
+      }
+    ]
   },
   "shearer-goal-analysis": {
     "title": "Shearer Goal Analysis",
-    "description_es": "Goles de Alan Shearer en la Premier League, ajustados por era y con fuentes: pipeline R con targets y dashboard Shiny",
+    "description_es": "Los goles de Alan Shearer en la Premier League, ajustados por época y con fuentes.",
     "category": "Data Pipeline (R)",
     "screenshot": "https://8o0sz0-federico-dignani.shinyapps.io/shearer-260/",
     "symbol": "plunger",
-    "description": "Alan Shearer's Premier League goals, era-adjusted and sourced: R targets pipeline and Shiny dashboard"
+    "description": "Alan Shearer's Premier League goals, adjusted for era and fully sourced.",
+    "case": {
+      "problem": "Goal totals from different eras are not comparable: leagues score at different rates, and most player stats come without sources.",
+      "approach": "An R targets pipeline where every number traces to a named source and every non-trivial transformation is a tested function. Goals per appearance are adjusted by the league's goals per match over each player's own seasons, with pointblank validation.",
+      "result": "A bilingual Shiny dashboard with six panels that states the less flattering finding: era-adjusted, Shearer ranks 4th among the ten highest career scorers, and his record rests on durability, not rate.",
+      "details": [
+        "Every number traces to a named source, and gaps in coverage are declared, never filled: 30% of goal types are 'unknown', not imputed.",
+        "The era adjustment divides each rate by the league's goals per match over the player's own seasons. It is real but small: it narrows the gap to modern scorers, not the order.",
+        "The insight under each chart comes from tested, derived-only functions, never from a number hard-coded in the app.",
+        "The free shinyapps.io tier sleeps when idle, so the first load can take a few seconds."
+      ]
+    },
+    "case_es": {
+      "problem": "Los totales de goles de distintas épocas no son comparables: las ligas anotan a ritmos distintos y la mayoría de las estadísticas no citan fuentes.",
+      "approach": "Un pipeline R con targets donde cada número se rastrea a una fuente con nombre y cada transformación no trivial es una función testeada. Los goles por partido se ajustan por los goles por partido de la liga durante las temporadas de cada jugador, con validación con pointblank.",
+      "result": "Un dashboard Shiny bilingüe de seis paneles que dice el hallazgo menos halagador: ajustado por época, Shearer es 4.º entre los diez máximos goleadores históricos, y su récord se apoya en la durabilidad, no en el ritmo.",
+      "details": [
+        "Cada número se rastrea a una fuente con nombre, y los vacíos de cobertura se declaran, nunca se rellenan: el 30 % de los tipos de gol es «desconocido», no imputado.",
+        "El ajuste por época divide cada tasa por los goles por partido de la liga durante las temporadas del jugador. Es real pero pequeño: achica la brecha con los goleadores modernos, no cambia el orden.",
+        "La lectura bajo cada gráfico sale de funciones testeadas y derivadas, nunca de un número escrito a mano en la app.",
+        "El plan gratuito de shinyapps.io se duerme cuando no se usa, así que la primera carga puede tardar unos segundos."
+      ]
+    },
+    "filters": {
+      "type": [
+        "pipelines",
+        "bi"
+      ],
+      "sector": "sports"
+    },
+    "gallery": [
+      {
+        "src": "output/figures/06_comparators.png",
+        "caption": "Era-adjusted scoring rate among the ten highest career scorers.",
+        "caption_es": "Ritmo goleador ajustado por época entre los diez máximos goleadores."
+      },
+      {
+        "src": "output/figures/05_context.png",
+        "caption": "Context of each goal at the moment it was scored.",
+        "caption_es": "Contexto de cada gol en el momento en que se marcó."
+      },
+      {
+        "src": "output/figures/04_goal_types.png",
+        "caption": "Goal type, with the unknown coverage declared instead of imputed.",
+        "caption_es": "Tipo de gol, declarando la cobertura desconocida en lugar de imputarla."
+      }
+    ]
   },
   "credit-card-fraud-detection": {
     "title": "Credit Card Fraud Detection",
-    "description_es": "Detección de fraude sobre 1,85 M de transacciones Sparkov: partición temporal, variables de velocidad, umbral por costos",
+    "description_es": "Detecta transacciones fraudulentas con tarjeta, con el umbral de alerta definido por costo.",
     "category": "Machine Learning",
     "symbol": "tear",
-    "description": "Fraud detection on 1.85M Sparkov transactions: temporal split, velocity features, cost-based threshold",
+    "description": "Flags fraudulent card transactions, with the alert threshold set by cost.",
     "static": "fraud-en",
-    "static_es": "fraud-es"
+    "static_es": "fraud-es",
+    "case": {
+      "problem": "Detect fraud in 1.85 million card transactions where fraud is 0.58% of the training period, so accuracy is meaningless: a model that never flags anything scores 99.4%.",
+      "approach": "A temporal split instead of a random one, causal velocity features that exclude the current row, a model ladder with calibration, and a cost-based decision threshold. Evaluated with PR-AUC against the real prevalence.",
+      "result": "A self-contained executed notebook plus an installable package (uv) with training and batch-scoring CLI. It documents a negative result too: distance to the merchant adds nothing on this synthetic data.",
+      "details": [
+        "PR-AUC against the real prevalence, never accuracy: a classifier that flags nothing scores 99.4%.",
+        "Velocity features use a rolling window that excludes the current row, so an aggregate never leaks into itself.",
+        "distance_km was built and left out: validation PR-AUC is 0.9760 without it and 0.9756 with it.",
+        "Probabilities are calibrated and the threshold maximises net savings under explicit costs."
+      ]
+    },
+    "case_es": {
+      "problem": "Detectar fraude en 1,85 millones de transacciones con tarjeta donde el fraude es el 0,58 % del período de entrenamiento, así que la exactitud no sirve: un modelo que nunca marca nada logra 99,4 %.",
+      "approach": "Partición temporal en lugar de aleatoria, variables de velocidad causales que excluyen la fila actual, una escalera de modelos con calibración y un umbral de decisión basado en costos. Evaluado con PR-AUC frente a la prevalencia real.",
+      "result": "Un notebook autocontenido y ejecutado, más un paquete instalable (uv) con CLI de entrenamiento y scoring por lotes. También documenta un resultado negativo: la distancia al comercio no aporta nada en estos datos sintéticos.",
+      "details": [
+        "PR-AUC frente a la prevalencia real, nunca exactitud: un clasificador que no marca nada logra 99,4 %.",
+        "Las variables de velocidad usan una ventana móvil que excluye la fila actual, así un agregado nunca se filtra a sí mismo.",
+        "distance_km se construyó y se dejó afuera: el PR-AUC de validación es 0,9760 sin ella y 0,9756 con ella.",
+        "Las probabilidades se calibran y el umbral maximiza el ahorro neto bajo costos explícitos."
+      ]
+    },
+    "filters": {
+      "type": [
+        "ml"
+      ],
+      "sector": "finance"
+    },
+    "gallery": [
+      {
+        "file": "gallery-fraud-threshold.png",
+        "caption": "Net savings and alert volume against the decision threshold.",
+        "caption_es": "Ahorro neto y volumen de alertas según el umbral de decisión."
+      },
+      {
+        "file": "gallery-fraud-shap.png",
+        "caption": "Top 10 features by mean |SHAP|.",
+        "caption_es": "Las 10 variables principales por |SHAP| medio."
+      }
+    ]
   },
   "pbc-stage-prediction": {
     "title": "PBC Stage Prediction",
@@ -60,11 +277,56 @@
   "agro-monitor-pampa": {
     "title": "Agro Monitor Pampa",
     "category": "Geospatial",
-    "description_es": "Monitoreo de soja en campaña en la Pampa argentina: NDVI de Sentinel-2 vía openEO y modelo de rendimiento",
+    "description_es": "Monitorea cultivos de soja en la Pampa argentina con imágenes satelitales.",
     "homepage": "https://agro-monitor-pampa.pages.dev",
     "screenshot": "https://agro-monitor-pampa.pages.dev/en/",
     "symbol": "eye",
-    "description": "In-season soybean monitoring in the Argentine Pampas: Sentinel-2 NDVI via openEO and a yield model",
-    "screenshot_es": "https://agro-monitor-pampa.pages.dev/"
+    "description": "Monitors soybean crops across the Argentine Pampas with satellite imagery.",
+    "screenshot_es": "https://agro-monitor-pampa.pages.dev/",
+    "case": {
+      "problem": "How is this season's soybean crop doing today in each department compared with history on the same date, and what yield does that anticipate?",
+      "approach": "Sentinel-2 NDVI through openEO with INTA crop masks over 152 departments, and a leave-one-campaign-out validated yield model, always compared with an honest baseline: the department's historical mean.",
+      "result": "A free static site (SvelteKit + MapLibre) with anomaly maps and yield estimates with their out-of-sample error. The model improves on the baseline by 17% in a normal year and 35% counting the 2022/23 drought, and it does not win every campaign.",
+      "details": [
+        "Leave-one-campaign-out validation on 932 observations (137 departments, 7 campaigns from 2018/19 to 2024/25) against MAGyP yields.",
+        "The 2022/23 drought weighs a lot: with only 7 campaigns and one drought, it can't be told whether the model gets droughts right or just learned that year.",
+        "Ridge beats HGB over all 7 campaigns and they tie in normal years; the model loses to the baseline in 2024/25 (493 vs 416 kg/ha).",
+        "Two layers: the anomaly against the same date (useful for insurers and banks) and the estimated yield with its out-of-sample error (traders, consultancies)."
+      ]
+    },
+    "case_es": {
+      "problem": "¿Cómo viene hoy la soja de la campaña en cada departamento frente a la historia en la misma fecha, y qué rendimiento anticipa?",
+      "approach": "NDVI de Sentinel-2 vía openEO con máscaras de cultivo del INTA sobre 152 departamentos, y un modelo de rendimiento validado leave-one-campaign-out, siempre comparado con una línea de base honesta: la media histórica del departamento.",
+      "result": "Un sitio estático gratuito (SvelteKit + MapLibre) con mapas de anomalías y estimaciones de rendimiento con su error fuera de muestra. El modelo mejora la línea de base un 17 % en un año normal y un 35 % contando la sequía 2022/23, y no gana todas las campañas.",
+      "details": [
+        "Validación leave-one-campaign-out sobre 932 observaciones (137 departamentos, 7 campañas de 2018/19 a 2024/25) contra rendimientos del MAGyP.",
+        "La sequía 2022/23 pesa mucho: con solo 7 campañas y una sequía, no se puede saber si el modelo acierta las sequías o solo aprendió ese año.",
+        "Ridge supera a HGB en las 7 campañas y empatan en años normales; el modelo pierde contra la línea de base en 2024/25 (493 vs 416 kg/ha).",
+        "Dos capas: la anomalía contra la misma fecha (útil para aseguradoras y bancos) y el rendimiento estimado con su error fuera de muestra (traders, consultoras)."
+      ]
+    },
+    "filters": {
+      "type": [
+        "geo",
+        "ml"
+      ],
+      "sector": "agro"
+    },
+    "gallery": [
+      {
+        "screenshot": "https://agro-monitor-pampa.pages.dev/en/",
+        "screenshot_es": "https://agro-monitor-pampa.pages.dev/",
+        "scroll": "#funciona",
+        "caption": "Validation against the historical baseline.",
+        "caption_es": "Validación frente a la línea de base histórica."
+      },
+      {
+        "screenshot": "https://agro-monitor-pampa.pages.dev/en/",
+        "screenshot_es": "https://agro-monitor-pampa.pages.dev/",
+        "scroll": "#como",
+        "caption": "The method, step by step.",
+        "caption_es": "El método, paso a paso."
+      }
+    ]
   }
 }

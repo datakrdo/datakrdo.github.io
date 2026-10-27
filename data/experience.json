@@ -1,1 +1,152 @@
-{"roles":[{"company":"Compass","title":{"en":"Senior Data Analyst","es":"Senior Data Analyst"},"start":"2025-04","end":null},{"company":"Senpai Academy","title":{"en":"Data Analysis Instructor","es":"Profesor de Análisis de Datos"},"start":"2024-10","end":null},{"company":"ArPOV · Sembrá Evolución","title":{"en":"Senior Consultant","es":"Senior Consultant"},"start":"2024-01","end":"2026-07"},{"company":"witan nook","title":{"en":"Data Analytics Manager","es":"Data Analytics Manager"},"start":"2024-02","end":"2026-03","summary":{"en":"Capital-markets and social-media analytics, with Power BI dashboards.","es":"Analítica de mercado de capitales y redes sociales, con dashboards en Power BI."}},{"company":"Microsoft (via Launch Consulting Group)","title":{"en":"Data Engineer & Data Analyst","es":"Data Engineer y Data Analyst"},"start":"2023-05","end":"2025-04","summary":{"en":"Compensation analytics and review automation, then data pipelines in Azure Synapse Analytics.","es":"Analítica de compensaciones y automatización de revisiones, luego pipelines de datos en Azure Synapse Analytics."}},{"company":"Dabadaba","title":{"en":"Data Analyst","es":"Data Analyst"},"start":"2021-10","end":"2023-05","summary":{"en":"Sales reporting and KPI design.","es":"Reportes de ventas y diseño de KPIs."}}]}
+{
+  "roles": [
+    {
+      "company": "Compass",
+      "title": {
+        "en": "Senior Data Analyst",
+        "es": "Senior Data Analyst"
+      },
+      "start": "2025-04",
+      "end": null,
+      "logos": [
+        {
+          "name": "Compass",
+          "file": "compass.svg"
+        }
+      ]
+    },
+    {
+      "company": "Senpai Academy",
+      "title": {
+        "en": "Data Analysis Instructor",
+        "es": "Profesor de Análisis de Datos"
+      },
+      "start": "2024-10",
+      "end": null,
+      "logos": [
+        {
+          "name": "Senpai Academy",
+          "file": "senpai.png"
+        }
+      ]
+    },
+    {
+      "company": "ArPOV · Sembrá Evolución",
+      "title": {
+        "en": "Senior Consultant",
+        "es": "Senior Consultant"
+      },
+      "start": "2024-01",
+      "end": "2026-07",
+      "logos": [
+        {
+          "name": "ArPOV",
+          "file": "arpov.png"
+        },
+        {
+          "name": "Sembrá Evolución",
+          "file": "sembra.svg"
+        }
+      ]
+    },
+    {
+      "company": "witan nook",
+      "title": {
+        "en": "Data Analytics Manager",
+        "es": "Data Analytics Manager"
+      },
+      "start": "2024-02",
+      "end": "2026-03",
+      "summary": {
+        "en": "Capital-markets and social-media analytics, with Power BI dashboards.",
+        "es": "Analítica de mercado de capitales y redes sociales, con dashboards en Power BI."
+      },
+      "logos": [
+        {
+          "name": "witan nook",
+          "file": "witannook.png"
+        }
+      ]
+    },
+    {
+      "company": "Desafío Latam",
+      "title": {
+        "en": "Data Science Tutor & Technical Reviewer",
+        "es": "Tutor y Revisor Técnico de Data Science"
+      },
+      "start": "2023-12",
+      "end": "2026-04",
+      "summary": {
+        "en": "Online classes for groups of 30 students and technical review of advanced Machine Learning and Deep Learning projects.",
+        "es": "Clases en línea para grupos de 30 estudiantes y evaluación técnica de proyectos avanzados de Machine Learning y Deep Learning."
+      },
+      "logos": [
+        {
+          "name": "Desafío Latam",
+          "file": "desafiolatam.png"
+        }
+      ]
+    },
+    {
+      "company": "Microsoft (via Launch Consulting Group)",
+      "title": {
+        "en": "Data Engineer & Data Analyst",
+        "es": "Data Engineer y Data Analyst"
+      },
+      "start": "2023-05",
+      "end": "2025-04",
+      "summary": {
+        "en": "Compensation analytics and review automation, then data pipelines in Azure Synapse Analytics.",
+        "es": "Analítica de compensaciones y automatización de revisiones, luego pipelines de datos en Azure Synapse Analytics."
+      },
+      "logos": [
+        {
+          "name": "Microsoft",
+          "file": "microsoft.svg"
+        },
+        {
+          "name": "Launch Consulting Group",
+          "file": "launch.svg"
+        }
+      ]
+    },
+    {
+      "company": "Coderhouse",
+      "title": {
+        "en": "Data Science Tutor",
+        "es": "Tutor de Data Science"
+      },
+      "start": "2023-03",
+      "end": "2024-03",
+      "summary": {
+        "en": "Graded weekly and bimonthly assessments for 60 students, with personalised feedback.",
+        "es": "Corrección de evaluaciones semanales y bimestrales de 60 estudiantes, con devoluciones personalizadas."
+      },
+      "logos": [
+        {
+          "name": "Coderhouse",
+          "file": "coderhouse.png"
+        }
+      ]
+    },
+    {
+      "company": "Dabadaba",
+      "title": {
+        "en": "Data Analyst",
+        "es": "Data Analyst"
+      },
+      "start": "2021-10",
+      "end": "2023-05",
+      "summary": {
+        "en": "Sales reporting and KPI design.",
+        "es": "Reportes de ventas y diseño de KPIs."
+      },
+      "logos": [
+        {
+          "name": "Dabadaba",
+          "file": "dabadaba.png"
+        }
+      ]
+    }
+  ]
+}
