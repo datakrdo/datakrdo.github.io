@@ -350,6 +350,18 @@ const yrs = document.getElementById("proofYears");
 if (yrs) yrs.textContent = Math.floor((Date.now() - new Date(2021, 9)) / 31557600000) + "+"; // since the first role (Oct 2021)
 const form = document.getElementById("contactForm");
 if (form && !form.action.includes("FORM_ID")) form.hidden = false; // shown only once a real Formspree id is set
+if (form) form.addEventListener("submit", async (e) => {
+  e.preventDefault(); // stay on the site: Formspree answers JSON when asked for it, on the free plan too
+  const btn = form.querySelector("[type=submit]"), status = document.getElementById("formStatus");
+  const say = (key, state) => { status.dataset.key = key; status.dataset.state = state; status.textContent = t(key); status.hidden = false; };
+  btn.disabled = true; say("f.sending", "wait");
+  try {
+    const r = await fetch(form.action, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } });
+    if (r.ok) { form.reset(); say("f.ok", "ok"); } else say("f.err", "err");
+  } catch { say("f.err", "err"); }
+  btn.disabled = false;
+});
+addEventListener("langchange", () => { const s = document.getElementById("formStatus"); if (s && s.dataset.key) s.textContent = t(s.dataset.key); });
 if (!reduced && "IntersectionObserver" in window) {
   const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); } }), { threshold: 0.08 });
   document.querySelectorAll(".section,.intro-strip-inner,.gatefold-inner").forEach((n) => { n.classList.add("reveal"); io.observe(n); });

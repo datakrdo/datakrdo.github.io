@@ -32,7 +32,7 @@ const T = {
     "contact.eyebrow": "05 / Eclipse", "contact.title": "Let's make visible what the data hides.",
     "contact.desc": "Available for remote roles. Tell me what problem you have and we'll see if I can help.",
     "contact.cta": "Email me",
-    "f.name": "Name", "f.email": "Email", "f.kind": "Reason", "f.k1": "Job opportunity", "f.k3": "Other", "f.msg": "Message", "f.send": "Send",
+    "f.name": "Name", "f.email": "Email", "f.kind": "Reason", "f.k1": "Job opportunity", "f.k3": "Other", "f.msg": "Message", "f.send": "Send", "f.sending": "Sending…", "f.ok": "Got it, thanks. I’ll get back to you soon.", "f.err": "Couldn’t send it. Email me at datakrdo@disroot.org.",
     "foot.credit": "Visual homage to The Dark Side of the Moon. Original cover concept by Hipgnosis; prism illustration by George Hardie. Personal project, no affiliation.",
     "foot.top": "Back to top"
   },
@@ -69,7 +69,7 @@ const T = {
     "contact.eyebrow": "05 / Eclipse", "contact.title": "Hagamos visible lo que esconden los datos.",
     "contact.desc": "Disponible para posiciones remotas. Contame qué problema tenés y vemos si puedo ayudar.",
     "contact.cta": "Escribime por email",
-    "f.name": "Nombre", "f.email": "Email", "f.kind": "Motivo", "f.k1": "Oportunidad laboral", "f.k3": "Otro", "f.msg": "Mensaje", "f.send": "Enviar",
+    "f.name": "Nombre", "f.email": "Email", "f.kind": "Motivo", "f.k1": "Oportunidad laboral", "f.k3": "Otro", "f.msg": "Mensaje", "f.send": "Enviar", "f.sending": "Enviando…", "f.ok": "Listo, recibí tu mensaje. Te respondo pronto.", "f.err": "No se pudo enviar. Escribime a datakrdo@disroot.org.",
     "foot.credit": "Homenaje visual a The Dark Side of the Moon. Concepto de portada original de Hipgnosis; ilustración del prisma de George Hardie. Proyecto personal, sin afiliación.",
     "foot.top": "Volver arriba"
   }
