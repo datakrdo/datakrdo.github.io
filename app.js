@@ -117,6 +117,7 @@ Promise.all([get("data/projects.json"), get("data/experience.json"), get("data/o
     lightbox.querySelector("img").src = s.src; lightbox.querySelector("img").alt = s.caption;
     lightbox.querySelector("p").textContent = s.caption;
     lightbox.showModal();
+    track("zoom", s.caption);
   }
 
   function slidesFor(p, title, demo) {
@@ -137,6 +138,7 @@ Promise.all([get("data/projects.json"), get("data/experience.json"), get("data/o
     const show = (n) => {
       cur = (n + slides.length) % slides.length;
       const s = slides[cur];
+      if (stage.firstChild) track("slide", title, { i: cur, demo: !!s.demo });
       const paint = () => {
         if (s.demo) stage.replaceChildren(demo || (demo = demoFrame(s.demo, title)));
         else {
@@ -357,12 +359,75 @@ if (form) form.addEventListener("submit", async (e) => {
   btn.disabled = true; say("f.sending", "wait");
   try {
     const r = await fetch(form.action, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } });
+    track("form", r.ok ? "ok" : "err", { motivo: new FormData(form).get("motivo") });
     if (r.ok) { form.reset(); say("f.ok", "ok"); } else say("f.err", "err");
-  } catch { say("f.err", "err"); }
+  } catch { track("form", "err"); say("f.err", "err"); }
   btn.disabled = false;
 });
 addEventListener("langchange", () => { const s = document.getElementById("formStatus"); if (s && s.dataset.key) s.textContent = t(s.dataset.key); });
 if (!reduced && "IntersectionObserver" in window) {
   const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); } }), { threshold: 0.08 });
   document.querySelectorAll(".section,.intro-strip-inner,.gatefold-inner").forEach((n) => { n.classList.add("reveal"); io.observe(n); });
+}
+
+/* ===== Visit tracking (see analytics/): sends events to our own Cloudflare Worker, no third party, no IP stored ===== */
+const BEACON = "https://datakrdo-analytics.jcbatman.workers.dev"; // https://datakrdo-analytics.<account>.workers.dev ; empty = tracking off
+const store = (k, v) => { try { return v === undefined ? localStorage.getItem(k) : v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch {} };
+const qs = new URLSearchParams(location.search);
+if (qs.has("notrack")) store("nt", "1"); else if (qs.has("track")) store("nt", null);
+const tracking = BEACON && !store("nt");
+const queue = [], seen = new Set(), dwell = {}, sections = [...document.querySelectorAll("section[id]")];
+const vid = store("vid") || (store("vid", (crypto.randomUUID?.() || String(Math.random()).slice(2))), store("vid"));
+const returning = !!store("seen"); store("seen", "1");
+let sid; try { sid = sessionStorage.sid || (sessionStorage.sid = (crypto.randomUUID?.() || String(Math.random()).slice(2))); } catch { sid = vid; }
+let maxScroll = 0, visibleMs = 0, last = Date.now();
+
+function track(type, name, props) { if (tracking) queue.push({ ts: Date.now(), type, name: name == null ? null : String(name), props }); }
+function flush() {
+  if (!tracking) return;
+  const d = Object.entries(dwell).filter(([, ms]) => ms > 0);
+  if (d.length) { queue.push({ ts: Date.now(), type: "dwell", props: Object.fromEntries(d) }); for (const k in dwell) delete dwell[k]; }
+  if (!queue.length) return;
+  const utm = {}; ["utm_source", "utm_medium", "utm_campaign", "ref"].forEach((k) => qs.has(k) && (utm[k] = qs.get(k)));
+  navigator.sendBeacon(BEACON, JSON.stringify({
+    vid, sid, path: location.pathname, hash: location.hash, referrer: document.referrer, utm, lang: window.lang?.() || root.lang,
+    theme: root.dataset.theme, vw: innerWidth, vh: innerHeight, wd: navigator.webdriver, events: queue.splice(0, 30),
+  }));
+}
+if (tracking) {
+  track("view", null, { returning });
+  // time per section: once a second, credit the section that fills most of the screen (only while the tab is visible)
+  setInterval(() => {
+    const now = Date.now(), dt = now - last; last = now;
+    if (document.hidden) return;
+    visibleMs += dt;
+    maxScroll = Math.max(maxScroll, Math.round(100 * (scrollY + innerHeight) / document.documentElement.scrollHeight));
+    let best, bestPx = 0;
+    for (const s of sections) {
+      const r = s.getBoundingClientRect(), px = Math.min(r.bottom, innerHeight) - Math.max(r.top, 0);
+      if (px > bestPx) { best = s.id; bestPx = px; }
+      if (px > 0.4 * Math.min(r.height, innerHeight) && !seen.has(s.id)) { seen.add(s.id); track("section", s.id); }
+    }
+    if (best) dwell[best] = (dwell[best] || 0) + dt;
+  }, 1000);
+  setInterval(flush, 10000);
+  const leave = () => { track("leave", null, { ms: visibleMs, scroll: maxScroll }); flush(); };
+  addEventListener("pagehide", leave);
+  document.addEventListener("visibilitychange", () => { if (document.hidden) leave(); else last = Date.now(); });
+
+  const opened = {};
+  document.addEventListener("toggle", (e) => {
+    const d = e.target, name = d.closest?.("article")?.dataset.name;
+    if (!d.classList?.contains("case") || !name) return;
+    if (d.open && !opened[name]) { opened[name] = Date.now(); track("case_open", name); }
+    else if (!d.open && opened[name]) { track("case_close", name, { ms: Date.now() - opened[name] }); delete opened[name]; }
+  }, true);
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest("a[href]"), chip = e.target.closest("#projectFilters .chip-btn");
+    if (a && /^(mailto:|https?:)/.test(a.href) && new URL(a.href).origin !== location.origin) track("click", a.href, { section: a.closest("section,footer")?.id || "footer" });
+    if (chip) track("filter", chip.dataset.group ? `${chip.dataset.group}:${chip.dataset.v}` : "all");
+  });
+  let l = lang(), theme = root.dataset.theme;
+  addEventListener("langchange", () => { if (lang() !== l) track("lang", l = lang()); });
+  addEventListener("themechange", () => { if (root.dataset.theme !== theme) { theme = root.dataset.theme; track("theme", theme); } });
 }

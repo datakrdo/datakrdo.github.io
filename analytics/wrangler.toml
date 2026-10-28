@@ -1,0 +1,8 @@
+name = "datakrdo-analytics"
+main = "worker.js"
+compatibility_date = "2026-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "datakrdo-analytics"
+database_id = "77120cd2-8944-49fa-a2ac-aae6730f3f2c"
