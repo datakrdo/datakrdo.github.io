@@ -5,6 +5,8 @@ import fs from "node:fs";
 const [, , url, W, H, wait, out, scheme = "light", selector = ""] = process.argv;
 const port = 9300 + Math.floor(Math.random() * 500);
 const chrome = spawn("google-chrome", ["--headless=new", "--no-sandbox", "--disable-gpu", "--hide-scrollbars", "--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader", `--remote-debugging-port=${port}`, "about:blank"], { stdio: "ignore" });
+process.on("exit", () => chrome.kill());
+setTimeout(() => process.exit(1), 90000).unref(); // a stuck Chrome or socket must not hold the deploy
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 let targets;
 for (let i = 0; i < 40 && !targets; i++) { try { targets = await (await fetch(`http://127.0.0.1:${port}/json`)).json(); } catch { await sleep(250); } }
@@ -20,7 +22,7 @@ await send("Page.navigate", { url });
 await sleep(+wait);
 if (selector) {
   // charts below the fold render lazily: scroll to the target, leave a little context above it
-  await send("Runtime.evaluate", { expression: `document.querySelector(${JSON.stringify(selector)})?.scrollIntoView(); scrollBy(0, -80)` });
+  await send("Runtime.evaluate", { expression: `document.querySelector(${JSON.stringify(selector)})?.scrollIntoView({behavior:'instant'}); scrollBy({top:-80, behavior:'instant'})` /* sites with scroll-behavior:smooth would cancel a smooth scroll */ });
   await sleep(6000);
 }
 fs.writeFileSync(out, Buffer.from((await send("Page.captureScreenshot", { format: "png" })).data, "base64"));

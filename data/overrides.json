@@ -66,8 +66,8 @@
   "sti-surveillance": {
     "title": "STI Surveillance",
     "description_es": "Un tablero semanal de infecciones de transmisión sexual en EE. UU., armado con datos públicos del CDC.",
-    "image": "docs/img/report_en.gif",
-    "image_es": "docs/img/report_es.gif",
+    "static": "sti-en",
+    "static_es": "sti-es",
     "category": "Power BI / MCP",
     "symbol": "eye",
     "description": "A weekly dashboard of sexually transmitted infections in the US, built from public CDC data.",

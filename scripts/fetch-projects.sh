@@ -47,14 +47,15 @@ for name in $(jq -r '.[].name' "$DATA/projects.json"); do
     sfx=""; [ "$lang" = es ] && sfx="_es"
     src=$(ov "$name" "image$sfx"); url=$(ov "$name" "screenshot$sfx"); stat=$(ov "$name" "static$sfx")
     if [ -n "$stat" ]; then
-      # pictures versioned in this repo: data/static/<stat>-light.png and <stat>-dark.png
+      # pictures versioned in this repo: data/static/<stat>-light.png and <stat>-dark.png, or one <stat>.png for both themes
       for theme in light dark; do
-        cp "$DATA/static/$stat-$theme.png" "$DATA/img/$name-$lang-$theme.png"; add "$name" "$lang" "$theme" "$name-$lang-$theme.png"
+        f="$DATA/static/$stat-$theme.png"; [ -f "$f" ] || f="$DATA/static/$stat.png"
+        cp "$f" "$DATA/img/$name-$lang-$theme.png"; add "$name" "$lang" "$theme" "$name-$lang-$theme.png"
       done
     elif [ -n "$src" ]; then
       ext="${src##*.}"; [ "$ext" = webp ] && ext=jpg
       out="$name-$lang.$ext"
-      curl -fsSL "https://raw.githubusercontent.com/$USER_LOGIN/$name/HEAD/$src" -o "$DATA/img/$out.raw"
+      curl -fsSL "https://raw.githubusercontent.com/$USER_LOGIN/$name/HEAD/$src" -o "$DATA/img/$out.raw" || { echo "image missing: $name/$src" >&2; continue; }
       shrink "$DATA/img/$out.raw" "$DATA/img/$out"; rm "$DATA/img/$out.raw"
       add "$name" "$lang" light "$out"; add "$name" "$lang" dark "$out"
     elif [ -n "$url" ]; then

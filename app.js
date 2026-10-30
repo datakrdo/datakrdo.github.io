@@ -95,15 +95,6 @@ Promise.all([get("data/projects.json"), get("data/experience.json"), get("data/o
     animate ? withTransition(run) : run();
   }
 
-  function demoFrame(url, title) {
-    const box = el("div", "case-demo"), frame = el("div", "case-frame"), f = el("iframe");
-    f.src = url; f.title = `${title}: demo`; f.setAttribute("sandbox", "allow-scripts allow-same-origin allow-popups");
-    frame.append(f);
-    box.append(frame, link(url, t("case.demo") + " ↗"));
-    new ResizeObserver(() => { f.style.transform = `scale(${frame.clientWidth / 1280})`; }).observe(frame); // render at desktop width, scaled to fit
-    return box;
-  }
-
   let lightbox;
   function zoom(s) {
     if (!lightbox) {
@@ -120,12 +111,11 @@ Promise.all([get("data/projects.json"), get("data/experience.json"), get("data/o
     track("zoom", s.caption);
   }
 
-  function slidesFor(p, title, demo) {
+  function slidesFor(p, title) {
     const L = lang(), th = root.dataset.theme, out = [];
     const main = (p.images && (p.images[L] || p.images.en)) || {};
     if (main[th] || main.light) out.push({ src: main[th] || main.light, caption: `${title}: ${t("proj.result")}` });
     ((p.gallery && (p.gallery[L] || p.gallery.en)) || []).forEach((g) => out.push({ src: g[th] || g.light, caption: g.caption }));
-    if (demo) out.push({ demo });
     return out;
   }
 
@@ -134,21 +124,18 @@ Promise.all([get("data/projects.json"), get("data/experience.json"), get("data/o
     v.tabIndex = 0; v.setAttribute("role", "group"); v.setAttribute("aria-roledescription", "carousel"); v.setAttribute("aria-label", title);
     const wrap = el("div", "stage-wrap"), stage = el("div", "stage"), cap = el("p", "stage-caption"), thumbs = el("div", "thumbs");
     cap.setAttribute("aria-live", "polite");
-    let cur = 0, demo;
+    let cur = 0;
     const show = (n) => {
       cur = (n + slides.length) % slides.length;
       const s = slides[cur];
-      if (stage.firstChild) track("slide", title, { i: cur, demo: !!s.demo });
+      if (stage.firstChild) track("slide", title, { i: cur });
       const paint = () => {
-        if (s.demo) stage.replaceChildren(demo || (demo = demoFrame(s.demo, title)));
-        else {
-          const b = el("button", "stage-img"), img = el("img");
-          b.type = "button"; b.setAttribute("aria-label", t("gal.zoom"));
-          img.src = s.src; img.alt = s.caption; b.append(img);
-          b.addEventListener("click", () => zoom(s));
-          stage.replaceChildren(b);
-        }
-        cap.textContent = s.demo ? `${title}: ${t("gal.demo")}` : s.caption;
+        const b = el("button", "stage-img"), img = el("img");
+        b.type = "button"; b.setAttribute("aria-label", t("gal.zoom"));
+        img.src = s.src; img.alt = s.caption; b.append(img);
+        b.addEventListener("click", () => zoom(s));
+        stage.replaceChildren(b);
+        cap.textContent = s.caption;
         [...thumbs.children].forEach((b, k) => b.setAttribute("aria-pressed", k === cur));
         stage.classList.remove("out");
       };
@@ -156,9 +143,8 @@ Promise.all([get("data/projects.json"), get("data/experience.json"), get("data/o
     };
     slides.forEach((s, k) => {
       const b = el("button", "thumb");
-      b.type = "button"; b.setAttribute("aria-label", s.demo ? t("gal.demo") : s.caption);
-      if (s.demo) b.append(el("span", null, t("gal.demo")));
-      else { const im = el("img"); im.src = s.src; im.alt = ""; im.loading = "lazy"; b.append(im); }
+      b.type = "button"; b.setAttribute("aria-label", s.caption);
+      const im = el("img"); im.src = s.src; im.alt = ""; im.loading = "lazy"; b.append(im);
       b.addEventListener("click", () => show(k));
       thumbs.append(b);
     });
@@ -203,7 +189,7 @@ Promise.all([get("data/projects.json"), get("data/experience.json"), get("data/o
     }, 60);
   }
 
-  function caseDetails(card, p, title, cs, demo) {
+  function caseDetails(card, p, title, cs) {
     const d = el("details", "case");
     d.append(el("summary", null, t("case.open")));
     const body = el("div", "case-body");
@@ -239,7 +225,7 @@ Promise.all([get("data/projects.json"), get("data/experience.json"), get("data/o
     d.addEventListener("toggle", () => {
       if (d.open) {
         cards.forEach((c) => { const x = c.el.querySelector(".case"); if (x && x !== d && x.open) x.open = false; });
-        if (!card.querySelector(".viewer")) { const slides = slidesFor(p, title, demo); if (slides.length) card.append(buildViewer(slides, title)); }
+        if (!card.querySelector(".viewer")) { const slides = slidesFor(p, title); if (slides.length) card.append(buildViewer(slides, title)); }
         openName = p.name; history.replaceState(null, "", "#caso-" + p.name);
       } else if (openName === p.name) {
         openName = null;
@@ -291,7 +277,7 @@ Promise.all([get("data/projects.json"), get("data/experience.json"), get("data/o
 
       card.append(visual, content);
       const cs = (lang() === "es" && o.case_es) || o.case;
-      if (cs) card.append(caseDetails(card, p, title, cs, o.demo || p.homepage || o.homepage));
+      if (cs) card.append(caseDetails(card, p, title, cs));
       return card;
     }));
     renderFilters(); applyFilter(false);
@@ -411,9 +397,10 @@ if (tracking) {
     if (best) dwell[best] = (dwell[best] || 0) + dt;
   }, 1000);
   setInterval(flush, 10000);
-  const leave = () => { track("leave", null, { ms: visibleMs, scroll: maxScroll }); flush(); };
+  let left = false;
+  const leave = () => { if (left) return; left = true; track("leave", null, { ms: visibleMs, scroll: maxScroll }); flush(); };
   addEventListener("pagehide", leave);
-  document.addEventListener("visibilitychange", () => { if (document.hidden) leave(); else last = Date.now(); });
+  document.addEventListener("visibilitychange", () => { if (document.hidden) leave(); else { left = false; last = Date.now(); } });
 
   const opened = {};
   document.addEventListener("toggle", (e) => {
@@ -424,7 +411,7 @@ if (tracking) {
   }, true);
   document.addEventListener("click", (e) => {
     const a = e.target.closest("a[href]"), chip = e.target.closest("#projectFilters .chip-btn");
-    if (a && /^(mailto:|https?:)/.test(a.href) && new URL(a.href).origin !== location.origin) track("click", a.href, { section: a.closest("section,footer")?.id || "footer" });
+    if (a && /^(mailto:|https?:)/.test(a.href) && new URL(a.href).origin !== location.origin) track("click", a.href.slice(0, 120), { section: a.closest("section,footer")?.id || "footer" });
     if (chip) track("filter", chip.dataset.group ? `${chip.dataset.group}:${chip.dataset.v}` : "all");
   });
   let l = lang(), theme = root.dataset.theme;

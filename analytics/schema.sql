@@ -9,5 +9,6 @@ CREATE TABLE IF NOT EXISTS events (
   bot INTEGER NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS events_ts ON events (ts);
-CREATE INDEX IF NOT EXISTS events_vid ON events (vid);
-CREATE INDEX IF NOT EXISTS events_org ON events (org);
+-- no vid/org indexes: each one is another D1 row write per event, and full scans are fine at this size
+DROP INDEX IF EXISTS events_vid;
+DROP INDEX IF EXISTS events_org;
