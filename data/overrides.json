@@ -170,6 +170,7 @@
     "description_es": "Los goles de Alan Shearer en la Premier League, ajustados por época y con fuentes.",
     "category": "Data Pipeline (R)",
     "screenshot": "https://8o0sz0-federico-dignani.shinyapps.io/shearer-260/",
+    "screenshot_wait": 40000,
     "symbol": "plunger",
     "description": "Alan Shearer's Premier League goals, adjusted for era and fully sourced.",
     "case": {

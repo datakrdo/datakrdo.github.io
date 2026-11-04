@@ -5,6 +5,7 @@
 #   static / static_es        prefix of pictures kept in data/static/ (<prefix>-light.png, <prefix>-dark.png)
 #   gallery                   list of extra pictures for the case viewer (see the gallery block below)
 #   screenshot / screenshot_es  live URL, captured once per theme (light + dark)
+#   screenshot_wait / screenshot_wait_es  ms to wait before capturing, default 14000 (slow apps, e.g. a Shiny app waking up)
 #   screenshot_scroll / screenshot_scroll_es  CSS selector to scroll to before capturing (lazy-rendered charts)
 #   hidden                    true = leave the project out
 # Screenshots already present in data/img are reused (the deploy restores them from a cache); FORCE=1 retakes them all.
@@ -62,7 +63,7 @@ for name in $(jq -r '.[].name' "$DATA/projects.json"); do
       for theme in light dark; do
         out="$name-$lang-$theme.png"
         if cached "$DATA/img/$out"; then add "$name" "$lang" "$theme" "$out"; continue; fi
-        if node "$HERE/scripts/screenshot.mjs" "$url" 1280 853 14000 "$DATA/img/$out.raw" "$theme" "$(ov "$name" "screenshot_scroll$sfx")" \
+        if node "$HERE/scripts/screenshot.mjs" "$url" 1280 853 "$(ov "$name" "screenshot_wait$sfx" | grep . || echo 14000)" "$DATA/img/$out.raw" "$theme" "$(ov "$name" "screenshot_scroll$sfx")" \
            && shrink "$DATA/img/$out.raw" "$DATA/img/$out"; then add "$name" "$lang" "$theme" "$out"
         else echo "screenshot failed: $url ($theme)" >&2; fi
         rm -f "$DATA/img/$out.raw"
