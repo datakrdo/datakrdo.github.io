@@ -7,6 +7,7 @@ export default {
   async fetch(req, env) {
     const origin = req.headers.get("Origin");
     if (req.method !== "POST" || !ORIGINS.includes(origin)) return new Response(null, { status: 403 });
+    if (!(await env.RL.limit({ key: req.headers.get("CF-Connecting-IP") || "?" })).success) return new Response(null, { status: 429 }); // key lives in memory only, never stored
     const raw = await req.text();
     if (raw.length > 16384) return new Response(null, { status: 413 });
     let b;

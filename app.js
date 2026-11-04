@@ -107,6 +107,7 @@ Promise.all([get("data/projects.json"), get("data/experience.json"), get("data/o
     }
     lightbox.querySelector("img").src = s.src; lightbox.querySelector("img").alt = s.caption;
     lightbox.querySelector("p").textContent = s.caption;
+    lightbox.setAttribute("aria-label", s.caption);
     lightbox.showModal();
     track("zoom", s.caption);
   }
@@ -191,7 +192,9 @@ Promise.all([get("data/projects.json"), get("data/experience.json"), get("data/o
 
   function caseDetails(card, p, title, cs) {
     const d = el("details", "case");
-    d.append(el("summary", null, t("case.open")));
+    const sum = el("summary", null, t("case.open"));
+    sum.setAttribute("aria-label", `${t("case.open")}: ${title}`);
+    d.append(sum);
     const body = el("div", "case-body");
     [["problem", cs.problem], ["approach", cs.approach], ["result", cs.result]].forEach(([k, v]) => {
       const item = el("div", "case-item");
@@ -320,9 +323,9 @@ Promise.all([get("data/projects.json"), get("data/experience.json"), get("data/o
       }));
       return g;
     };
-    const track = el("div", "logo-track");
-    track.append(group(false), group(true));
-    marquee.replaceChildren(track);
+    const belt = el("div", "logo-track");
+    belt.append(group(false), group(true));
+    marquee.replaceChildren(belt);
     if (roles.length) show(roles[0], 0);
   }
 
@@ -337,7 +340,6 @@ Promise.all([get("data/projects.json"), get("data/experience.json"), get("data/o
 const yrs = document.getElementById("proofYears");
 if (yrs) yrs.textContent = Math.floor((Date.now() - new Date(2021, 9)) / 31557600000) + "+"; // since the first role (Oct 2021)
 const form = document.getElementById("contactForm");
-if (form && !form.action.includes("FORM_ID")) form.hidden = false; // shown only once a real Formspree id is set
 if (form) form.addEventListener("submit", async (e) => {
   e.preventDefault(); // stay on the site: Formspree answers JSON when asked for it, on the free plan too
   const btn = form.querySelector("[type=submit]"), status = document.getElementById("formStatus");
@@ -361,7 +363,7 @@ const BEACON = "https://datakrdo-analytics.jcbatman.workers.dev"; // https://dat
 const store = (k, v) => { try { return v === undefined ? localStorage.getItem(k) : v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch {} };
 const qs = new URLSearchParams(location.search);
 if (qs.has("notrack")) store("nt", "1"); else if (qs.has("track")) store("nt", null);
-const tracking = BEACON && !store("nt");
+const tracking = BEACON && !store("nt") && !navigator.globalPrivacyControl && navigator.doNotTrack !== "1"; // honour Do Not Track and GPC
 const queue = [], seen = new Set(), dwell = {}, sections = [...document.querySelectorAll("section[id]")];
 const vid = store("vid") || (store("vid", (crypto.randomUUID?.() || String(Math.random()).slice(2))), store("vid"));
 const returning = !!store("seen"); store("seen", "1");
@@ -381,7 +383,7 @@ function flush() {
   }));
 }
 if (tracking) {
-  track("view", null, { returning });
+  track("view", null, { returning, rm: reduced, sys: matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark" });
   // time per section: once a second, credit the section that fills most of the screen (only while the tab is visible)
   setInterval(() => {
     const now = Date.now(), dt = now - last; last = now;
@@ -398,7 +400,13 @@ if (tracking) {
   }, 1000);
   setInterval(flush, 10000);
   let left = false;
-  const leave = () => { if (left) return; left = true; track("leave", null, { ms: visibleMs, scroll: maxScroll }); flush(); };
+  // Core Web Vitals via the platform, no library: LCP, CLS and the slowest interaction (INP approximation)
+  const vit = { lcp: 0, cls: 0, inp: 0 };
+  const watch = (type, fn) => { try { new PerformanceObserver((l) => l.getEntries().forEach(fn)).observe({ type, buffered: true, durationThreshold: 40 }); } catch {} };
+  watch("largest-contentful-paint", (e) => { vit.lcp = Math.round(e.startTime); });
+  watch("layout-shift", (e) => { if (!e.hadRecentInput) vit.cls = +(vit.cls + e.value).toFixed(3); });
+  watch("event", (e) => { vit.inp = Math.max(vit.inp, Math.round(e.duration)); });
+  const leave = () => { if (left) return; left = true; track("leave", null, { ms: visibleMs, scroll: maxScroll, vitals: vit }); flush(); };
   addEventListener("pagehide", leave);
   document.addEventListener("visibilitychange", () => { if (document.hidden) leave(); else { left = false; last = Date.now(); } });
 
@@ -413,7 +421,22 @@ if (tracking) {
     const a = e.target.closest("a[href]"), chip = e.target.closest("#projectFilters .chip-btn");
     if (a && /^(mailto:|https?:)/.test(a.href) && new URL(a.href).origin !== location.origin) track("click", a.href.slice(0, 120), { section: a.closest("section,footer")?.id || "footer" });
     if (chip) track("filter", chip.dataset.group ? `${chip.dataset.group}:${chip.dataset.v}` : "all");
+    const jump = e.target.closest("a[href^='#']");
+    if (jump) track("nav", jump.getAttribute("href"), { from: jump.closest("section,header,footer")?.id || jump.closest("header,footer")?.tagName.toLowerCase() });
+    if (e.target.closest(".related-item")) track("related", e.target.closest("article")?.dataset.name);
   });
+  // experience: which company the visitor looked at, once each
+  const looked = new Set();
+  document.getElementById("logoMarquee")?.addEventListener("click", (e) => {
+    const b = e.target.closest(".logo-item:not([tabindex='-1'])"), n = b?.getAttribute("aria-label")?.split(":")[0];
+    if (n && !looked.has(n)) { looked.add(n); track("exp", n); }
+  });
+  // form funnel: started, and copied the address
+  form?.addEventListener("focusin", () => { track("form_start"); }, { once: true });
+  document.querySelector(".contact-mail")?.addEventListener("copy", () => track("copy", "mail"));
+  // JS errors: short message only, no stack or URL, at most 3 per session
+  let errs = 0;
+  addEventListener("error", (e) => { if (errs++ < 3) track("error", String(e.message).slice(0, 120)); });
   let l = lang(), theme = root.dataset.theme;
   addEventListener("langchange", () => { if (lang() !== l) track("lang", l = lang()); });
   addEventListener("themechange", () => { if (root.dataset.theme !== theme) { theme = root.dataset.theme; track("theme", theme); } });

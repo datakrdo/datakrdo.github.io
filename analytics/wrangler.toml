@@ -6,3 +6,10 @@ compatibility_date = "2026-01-01"
 binding = "DB"
 database_name = "datakrdo-analytics"
 database_id = "77120cd2-8944-49fa-a2ac-aae6730f3f2c"
+
+[[ratelimits]]
+name = "RL"
+namespace_id = "1001"
+  [ratelimits.simple]
+  limit = 60
+  period = 60

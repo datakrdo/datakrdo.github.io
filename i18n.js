@@ -80,8 +80,6 @@ const T = {
   let lang;
   try { lang = localStorage.getItem("lang"); } catch {}
   if (!T[lang]) lang = (navigator.languages?.[0] || navigator.language || "en").toLowerCase().startsWith("es") ? "es" : "en";
-  const forced = window.FORCE_LANG;
-  if (T[forced]) lang = forced;
 
   window.t = (key) => T[lang][key] ?? key;
   window.lang = () => lang;
@@ -104,7 +102,7 @@ const T = {
   document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("langToggle")?.addEventListener("click", () => {
       apply(lang === "en" ? "es" : "en");
-      if (!forced) try { localStorage.setItem("lang", lang); } catch {} // persist only an explicit choice; first visit follows the browser
+      try { localStorage.setItem("lang", lang); } catch {} // persist only an explicit choice; first visit follows the browser
     });
     apply(lang);
   });
