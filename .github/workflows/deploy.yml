@@ -35,7 +35,7 @@ jobs:
           cfg=$(jq -S 'map_values(del(.case, .case_es, .description, .description_es, .title, .category, .filters))' data/overrides.json)
           pushed=$(for n in $sites; do gh api "repos/${{ github.repository_owner }}/$n" --jq .pushed_at; done)
           echo "key=shots-${{ hashFiles('scripts/fetch-projects.sh', 'scripts/screenshot.mjs') }}-$(echo "$cfg$pushed" | sha1sum | cut -c1-16)" >> "$GITHUB_OUTPUT"
-      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: data/img
           key: ${{ steps.shots.outputs.key }}
