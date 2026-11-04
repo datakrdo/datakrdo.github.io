@@ -4,3 +4,7 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    ignore:
+      # Majors are upgraded by hand: upload-pages-artifact 4+ drops dotfiles (.well-known/) unless include-hidden-files: true is set.
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
