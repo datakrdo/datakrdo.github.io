@@ -1,3 +1,6 @@
+/* ===== Header: theme, mobile menu, year ===== */
+(()=>{const root=document.documentElement,header=document.getElementById("siteHeader"),themeToggle=document.getElementById("themeToggle"),themeIcon=document.getElementById("themeIcon"),menuToggle=document.getElementById("menuToggle"),mobilePanel=document.getElementById("mobilePanel"),year=document.getElementById("currentYear");const sun='<path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0-8 0m-5 0h1m8-9v1m8 8h1m-9 8v1M5.6 5.6l.7.7m12.1-.7l-.7.7m0 11.4l.7.7m-12.1-.7l-.7.7"></path>',moon='<path d="M12 3h.393a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992z"></path>';let theme=root.dataset.theme;function label(){themeToggle.setAttribute("aria-label",t(theme==="dark"?"a11y.toLight":"a11y.toDark"))}function apply(value){theme=value;root.dataset.theme=value;dispatchEvent(new Event("themechange"));themeIcon.innerHTML=value==="dark"?sun:moon;label()}function close(){mobilePanel.classList.remove("is-open");menuToggle.setAttribute("aria-expanded","false")}addEventListener("keydown",e=>{if(e.key==="Escape"&&mobilePanel.classList.contains("is-open")){close();menuToggle.focus()}});apply(theme);addEventListener("langchange",label);year.textContent=new Date().getFullYear();themeToggle.addEventListener("click",()=>{apply(theme==="dark"?"light":"dark");try{localStorage.setItem("theme",theme)}catch{}});menuToggle.addEventListener("click",()=>{const open=!mobilePanel.classList.contains("is-open");mobilePanel.classList.toggle("is-open",open);menuToggle.setAttribute("aria-expanded",String(open))});mobilePanel.querySelectorAll("a").forEach(a=>a.addEventListener("click",close));window.addEventListener("scroll",()=>header.classList.toggle("is-scrolled",scrollY>24),{passive:true});window.addEventListener("resize",()=>{if(innerWidth>980)close()})})()
+
 const root = document.documentElement;
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -37,7 +40,7 @@ const el = (tag, cls, text) => {
 };
 const link = (href, label, cls) => {
   const a = el("a", cls, label);
-  a.href = href; a.target = "_blank"; a.rel = "noopener";
+  a.href = href; a.target = "_blank"; a.rel = "noopener noreferrer";
   return a;
 };
 const get = (path) => fetch(path).then((r) => (r.ok ? r.json() : null)).catch(() => null);

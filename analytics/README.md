@@ -20,3 +20,10 @@ npx wrangler d1 export datakrdo-analytics --remote --output events.sql
 ```
 
 Time per section: `SELECT key, SUM(value)/1000 s FROM events, json_each(props) WHERE events.type='dwell' AND bot=0 GROUP BY key ORDER BY s DESC`.
+
+Privacy (see `../privacy.html`): events older than 12 months are deleted by the weekly cron (`scheduled` in `worker.js`).
+Erasure request: the visitor copies their identifier from `/privacy.html` and sends it by email, then:
+
+```bash
+npx wrangler d1 execute datakrdo-analytics --remote --command "DELETE FROM events WHERE vid='<id>'"
+```

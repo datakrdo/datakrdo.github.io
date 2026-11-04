@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-BHZjx7prbp9RTFDgjX8a42aWsaECS4cJ/WdwgBCf6+4='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'none'; base-uri 'none'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark")}catch{}</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M20 4 35 33H5L20 4Z' fill='none' stroke='%23888' stroke-width='3'/%3E%3C/svg%3E">
+<title>Privacidad · Privacy — Federico Dignani</title>
+<style>
+@font-face{font-family:Manrope;font-weight:400 800;font-display:swap;src:url(data/fonts/manrope.woff2) format('woff2')}
+:root{color-scheme:light;--bg:#efeee8;--text:#151515;--muted:#5b5b54;--border:rgba(20,20,20,.15)}
+[data-theme=dark]{color-scheme:dark;--bg:#050505;--text:#f2f2ec;--muted:#aaa9a2;--border:rgba(255,255,255,.14)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:400 1.0625rem/1.65 Manrope,Arial,sans-serif}
+main{width:min(calc(100% - 2rem),44rem);margin:0 auto;padding:4rem 0 5rem}
+h1{font-size:clamp(2rem,1.4rem + 2.4vw,3rem);line-height:1.1;letter-spacing:-.03em;font-weight:800;margin:0 0 1.5rem}
+h2{font-size:1.15rem;margin:2rem 0 .5rem}p,li{color:var(--muted)}li{margin:.35rem 0}a{color:var(--text);text-underline-offset:3px}
+code{font-family:"DM Mono",monospace;font-size:.9em}
+button{font:inherit;font-weight:700;min-height:44px;padding:.5rem 1.25rem;color:var(--bg);background:var(--text);border:0;border-radius:999px;cursor:pointer}
+.back{display:inline-flex;align-items:center;min-height:44px;margin-bottom:1.5rem}
+html[lang=en] [lang=es],html[lang=es] [lang=en]{display:none}
+:focus-visible{outline:2px solid #45bac0;outline-offset:4px}
+</style>
+</head>
+<body>
+<main>
+<a class="back" href="./">← <span lang="es">Volver al sitio</span><span lang="en">Back to the site</span></a>
+<div lang="es">
+<h1>Privacidad</h1>
+<p>Este sitio mide visitas para saber qué partes se leen. No usa cookies, no tiene publicidad ni vende datos.</p>
+<h2>Qué se guarda</h2>
+<ul>
+<li>Un identificador aleatorio en tu navegador (no está ligado a tu nombre ni a tu email) y otro por sesión.</li>
+<li>Qué secciones ves y cuánto tiempo, qué casos abrís, filtros, idioma y tema, y clics en enlaces externos.</li>
+<li>País, región, ciudad, zona horaria y red (ASN) que Cloudflare deduce de tu conexión, y el tipo de navegador.</li>
+<li>La dirección IP <strong>no</strong> se guarda.</li>
+</ul>
+<h2>Cuánto tiempo</h2>
+<p>12 meses. Pasado ese plazo, los eventos se borran automáticamente.</p>
+<h2>Cómo desactivarlo</h2>
+<p>El sitio respeta Do Not Track y Global Privacy Control. También podés abrir <code>/?notrack</code> una vez en cada navegador (<code>/?track</code> lo revierte).</p>
+<h2>Terceros</h2>
+<ul>
+<li>GitHub Pages aloja el sitio.</li>
+<li>Cloudflare (Workers y D1) recibe y guarda los eventos descritos.</li>
+<li>Formspree procesa el formulario de contacto: nombre, email y mensaje, solo si lo enviás.</li>
+</ul>
+<h2>Tus derechos</h2>
+<p>Podés pedir que borre los datos asociados a tu identificador. Copialo con el botón y escribime a <a href="mailto:datakrdo@disroot.org">datakrdo@disroot.org</a>.</p>
+</div>
+<div lang="en">
+<h1>Privacy</h1>
+<p>This site measures visits to learn which parts get read. It uses no cookies, no ads, and sells no data.</p>
+<h2>What is stored</h2>
+<ul>
+<li>A random identifier in your browser (not tied to your name or email) and another per session.</li>
+<li>Which sections you view and for how long, which cases you open, filters, language and theme, and clicks on external links.</li>
+<li>Country, region, city, time zone and network (ASN) that Cloudflare infers from your connection, and the browser type.</li>
+<li>Your IP address is <strong>not</strong> stored.</li>
+</ul>
+<h2>How long</h2>
+<p>12 months. After that, events are deleted automatically.</p>
+<h2>How to turn it off</h2>
+<p>The site honours Do Not Track and Global Privacy Control. You can also open <code>/?notrack</code> once in each browser (<code>/?track</code> undoes it).</p>
+<h2>Third parties</h2>
+<ul>
+<li>GitHub Pages hosts the site.</li>
+<li>Cloudflare (Workers and D1) receives and stores the events described above.</li>
+<li>Formspree processes the contact form: name, email and message, only if you send it.</li>
+</ul>
+<h2>Your rights</h2>
+<p>You can ask me to delete the data tied to your identifier. Copy it with the button and email <a href="mailto:datakrdo@disroot.org">datakrdo@disroot.org</a>.</p>
+</div>
+<p><button type="button" id="copyId"><span lang="es">Copiar mi identificador</span><span lang="en">Copy my identifier</span></button> <span id="copyMsg" role="status"></span></p>
+</main>
+<script src="privacy.js"></script>
+</body>
+</html>
