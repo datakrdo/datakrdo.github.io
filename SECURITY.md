@@ -11,7 +11,7 @@ Scope: a personal portfolio (static site on GitHub Pages, one Cloudflare Worker 
 |---|---|---|---|
 | Content Security Policy, strict referrer policy, no third-party scripts or fonts | A.8.26, A.8.28 | CC6.6 | `index.html`, `privacy.html` |
 | Fonts self-hosted (no visitor IP sent to Google) | 27701 7.4.x | P6 | `data/fonts/` |
-| Privacy notice, opt-out (DNT, GPC, `?notrack`), no IP stored | 27701 7.2.x, 7.3.x | P1, P2, P5 | `privacy.html`, `app.js` |
+| Privacy notice, opt-out (DNT, GPC, `?notrack`), no IP and no persistent visitor ID stored | 27701 7.2.x, 7.3.x | P1, P2, P5 | `privacy.html`, `app.js` |
 | 12-month retention, deletion on request | 27701 7.4.7, 7.3.x | P4, P5 | `analytics/worker.js` (`scheduled`), `analytics/README.md` |
 | Origin allowlist, event-type allowlist, size limit, rate limit, server-side timestamps | A.8.16, A.8.20 | CC6.1, CC6.6 | `analytics/worker.js` |
 | Worker logs | A.8.15, A.8.16 | CC7.2 | `analytics/wrangler.toml` (`observability`) |

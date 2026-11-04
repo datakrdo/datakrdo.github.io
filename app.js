@@ -8,13 +8,16 @@ const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const cv = document.getElementById("stars"), ctx = cv.getContext("2d");
 let stars = [];
 function resize() {
-  cv.width = innerWidth; cv.height = innerHeight;
+  const widthChanged = innerWidth !== cv.width; // a height-only change (mobile URL bar) keeps the same stars
+  cv.width = innerWidth; cv.height = innerHeight; // resetting the size clears the canvas
+  if (!widthChanged && stars.length) { if (reduced) draw(0); return; }
   const n = Math.min(180, Math.floor(innerWidth * innerHeight / 9000));
   stars = Array.from({ length: n }, () => ({
     x: Math.random() * cv.width, y: Math.random() * cv.height,
     r: Math.random() * 1.4 + .3, p: Math.random() * Math.PI * 2,
     s: .4 + Math.random() * .9, d: .02 + Math.random() * .06
   }));
+  if (reduced) draw(0); // reduced motion never runs the animation loop, so repaint here
 }
 function draw(time) {
   ctx.clearRect(0, 0, cv.width, cv.height);
@@ -368,9 +371,11 @@ const qs = new URLSearchParams(location.search);
 if (qs.has("notrack")) store("nt", "1"); else if (qs.has("track")) store("nt", null);
 const tracking = BEACON && !store("nt") && !navigator.globalPrivacyControl && navigator.doNotTrack !== "1"; // honour Do Not Track and GPC
 const queue = [], seen = new Set(), dwell = {}, sections = [...document.querySelectorAll("section[id]")];
-const vid = store("vid") || (store("vid", (crypto.randomUUID?.() || String(Math.random()).slice(2))), store("vid"));
-const returning = !!store("seen"); store("seen", "1");
-let sid; try { sid = sessionStorage.sid || (sessionStorage.sid = (crypto.randomUUID?.() || String(Math.random()).slice(2))); } catch { sid = vid; }
+// No persistent visitor ID: one random ID per tab session (see privacy.html). Old IDs left by earlier versions are purged.
+store("vid", null); store("seen", null);
+let sid = String(Math.random()).slice(2);
+try { sid = sessionStorage.sid || (sessionStorage.sid = crypto.randomUUID?.() || sid); } catch {}
+const vid = sid;
 let maxScroll = 0, visibleMs = 0, last = Date.now();
 
 function track(type, name, props) { if (tracking) queue.push({ ts: Date.now(), type, name: name == null ? null : String(name), props }); }
@@ -382,11 +387,11 @@ function flush() {
   const utm = {}; ["utm_source", "utm_medium", "utm_campaign", "ref"].forEach((k) => qs.has(k) && (utm[k] = qs.get(k)));
   navigator.sendBeacon(BEACON, JSON.stringify({
     vid, sid, path: location.pathname, hash: location.hash, referrer: document.referrer, utm, lang: window.lang?.() || root.lang,
-    theme: root.dataset.theme, vw: innerWidth, vh: innerHeight, wd: navigator.webdriver, events: queue.splice(0, 30),
+    theme: root.dataset.theme, vw: innerWidth, vh: innerHeight, wd: navigator.webdriver, events: queue.splice(0, 10), // the Worker keeps at most 10 per request
   }));
 }
 if (tracking) {
-  track("view", null, { returning, rm: reduced, sys: matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark" });
+  track("view", null, { rm: reduced, sys: matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark" });
   // time per section: once a second, credit the section that fills most of the screen (only while the tab is visible)
   setInterval(() => {
     const now = Date.now(), dt = now - last; last = now;

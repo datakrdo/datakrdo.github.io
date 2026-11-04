@@ -17,5 +17,5 @@ database_id = "77120cd2-8944-49fa-a2ac-aae6730f3f2c"
 name = "RL"
 namespace_id = "1001"
   [ratelimits.simple]
-  limit = 60
+  limit = 10
   period = 60
