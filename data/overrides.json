@@ -2,7 +2,7 @@
   "lyric-emotion": {
     "title": "Lyric Emotion",
     "description_es": "Lee las emociones en letras de canciones y compara a The Cure con The Smiths.",
-    "image": "docs/img/hero.png",
+    "screenshot": "https://datakrdo.github.io/lyric-emotion/",
     "category": "NLP",
     "symbol": "tear",
     "description": "Reads the emotions in song lyrics, comparing The Cure and The Smiths.",
@@ -55,8 +55,7 @@
         "caption": "Mean probability of each emotion, album by album.",
         "caption_es": "Probabilidad media de cada emoción, álbum por álbum."
       }
-    ],
-    "image_light": "docs/img/hero-light.png"
+    ]
   },
   "monte-hermoso-tree-analysis": {
     "title": "Monte Hermoso Tree Analysis",
