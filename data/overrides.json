@@ -55,7 +55,8 @@
         "caption": "Mean probability of each emotion, album by album.",
         "caption_es": "Probabilidad media de cada emoción, álbum por álbum."
       }
-    ]
+    ],
+    "image_light": "docs/img/hero-light.png"
   },
   "monte-hermoso-tree-analysis": {
     "title": "Monte Hermoso Tree Analysis",

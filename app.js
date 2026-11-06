@@ -324,7 +324,11 @@ Promise.all([get("data/projects.json"), get("data/experience.json"), get("data/o
           m.append(img); b.append(m);
         } else b.append(el("span", "logo-word", lg.name));
         const on = () => { show(r, i); [...document.querySelectorAll(".logo-item")].forEach((x) => x.setAttribute("aria-pressed", x === b)); };
-        b.addEventListener("mouseenter", on); b.addEventListener("focus", on); b.addEventListener("click", on);
+        b.addEventListener("mouseenter", on); b.addEventListener("focus", on);
+        b.addEventListener("click", () => { // click pauses; click again on the same logo resumes
+          const resume = marquee.classList.contains("is-paused") && b.getAttribute("aria-pressed") === "true";
+          on(); marquee.classList.toggle("is-paused", !resume);
+        });
         g.append(b);
       }));
       return g;

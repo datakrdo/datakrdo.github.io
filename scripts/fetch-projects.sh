@@ -2,6 +2,7 @@
 # Writes data/projects.json with the public repos of the user that carry the topic "portfolio",
 # and prepares each project's thumbnails in data/img/ (configured in data/overrides.json):
 #   image / image_es          path of a picture inside the repo (same file for light and dark theme)
+#   image_light / image_light_es  optional picture inside the repo used for the light theme; image then serves the dark one
 #   static / static_es        prefix of pictures kept in data/static/ (<prefix>-light.png, <prefix>-dark.png)
 #   gallery                   list of extra pictures for the case viewer (see the gallery block below)
 #   screenshot / screenshot_es  live URL, captured once per theme (light + dark)
@@ -59,6 +60,12 @@ for name in $(jq -r '.[].name' "$DATA/projects.json"); do
       curl -fsSL "https://raw.githubusercontent.com/$USER_LOGIN/$name/HEAD/$src" -o "$DATA/img/$out.raw" || { echo "image missing: $name/$src" >&2; continue; }
       shrink "$DATA/img/$out.raw" "$DATA/img/$out"; rm "$DATA/img/$out.raw"
       add "$name" "$lang" light "$out"; add "$name" "$lang" dark "$out"
+      lsrc=$(ov "$name" "image_light$sfx")
+      if [ -n "$lsrc" ]; then
+        lout="$name-$lang-light.${lsrc##*.}"
+        curl -fsSL "https://raw.githubusercontent.com/$USER_LOGIN/$name/HEAD/$lsrc" -o "$DATA/img/$lout.raw" && shrink "$DATA/img/$lout.raw" "$DATA/img/$lout" && add "$name" "$lang" light "$lout" || echo "image missing: $name/$lsrc" >&2
+        rm -f "$DATA/img/$lout.raw"
+      fi
     elif [ -n "$url" ]; then
       for theme in light dark; do
         out="$name-$lang-$theme.png"
