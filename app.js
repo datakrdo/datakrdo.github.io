@@ -224,7 +224,7 @@ Promise.all([get("data/projects.json"), get("data/experience.json"), get("data/o
       rel.forEach((r) => {
         const b = el("button", "related-item");
         b.type = "button";
-        b.append(el("strong", null, (ov[r.q.name] || {}).title || r.q.name), el("span", null, `${t("rel.share")}: ${r.why.join(" · ")}`));
+        b.append(el("strong", null, ((lang() === "es" && (ov[r.q.name] || {}).title_es) || (ov[r.q.name] || {}).title || r.q.name)), el("span", null, `${t("rel.share")}: ${r.why.join(" · ")}`));
         b.addEventListener("click", () => openCase(r.q.name));
         box.append(b);
       });
@@ -249,7 +249,7 @@ Promise.all([get("data/projects.json"), get("data/experience.json"), get("data/o
     cards = [];
     list.replaceChildren(...(projects || []).map((p, i) => {
       const o = ov[p.name] || {};
-      const title = o.title || p.name;
+      const title = (lang() === "es" && o.title_es) || o.title || p.name;
       const desc = (lang() === "es" && o.description_es) || o.description || p.description || "";
       const card = el("article", "project-card");
       card.style.setProperty("--c", color(i));

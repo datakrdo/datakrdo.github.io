@@ -111,7 +111,8 @@
     ]
   },
   "vigilancia-respiratoria-ar": {
-    "title": "Vigilancia Respiratoria AR",
+    "title": "Argentina Respiratory Surveillance",
+    "title_es": "Vigilancia Respiratoria AR",
     "description_es": "Sigue las infecciones respiratorias en Argentina a partir del sistema nacional de vigilancia.",
     "category": "Analytics Engineering",
     "homepage": "https://datakrdo.github.io/vigilancia-respiratoria-ar/",
@@ -124,7 +125,7 @@
     "case": {
       "problem": "Respiratory infections generate about 1.3 million notifications a year in Argentina's SNVS 2.0, but the raw releases overlap and carry quality issues, which makes seasons hard to compare.",
       "approach": "dbt on Databricks (Unity Catalog, serverless SQL) with a documented data profile, and SQL analyses of season timing, geographic spread, early-warning lead time and hotspot concentration, ranked per 100k population.",
-      "result": "A bilingual public site (Observable) fed by a weekly self-updating dataset. It reports a negative result too: seasons do not travel north to south, and the early-warning rule catches about 1 in 5 outbreaks, with a median 6-week lead.",
+      "result": "A public site (Observable) fed by a weekly self-updating dataset. It reports a negative result too: seasons do not travel north to south, and the early-warning rule catches about 1 in 5 outbreaks, with a median 6-week lead.",
       "details": [
         "Ranked by excess cases per 100,000 population, so big provinces don't top the list just for being big.",
         "Population-weighted Gini and top-decile overlap separate concentration of risk from concentration of people.",
@@ -135,7 +136,7 @@
     "case_es": {
       "problem": "Las infecciones respiratorias generan unas 1,3 millones de notificaciones al año en el SNVS 2.0 de Argentina, pero las publicaciones crudas se superponen y tienen problemas de calidad, lo que dificulta comparar temporadas.",
       "approach": "dbt sobre Databricks (Unity Catalog, SQL serverless) con un perfil de datos documentado, y análisis en SQL del momento de la temporada, la dispersión geográfica, el tiempo de anticipación de alertas y la concentración de focos, ordenados por 100 mil habitantes.",
-      "result": "Un sitio público bilingüe (Observable) alimentado por un dataset que se actualiza solo cada semana. También informa un resultado negativo: las temporadas no viajan de norte a sur, y la regla de alerta temprana detecta cerca de 1 de cada 5 brotes, con una anticipación mediana de 6 semanas.",
+      "result": "Un sitio público (Observable) alimentado por un dataset que se actualiza solo cada semana. También informa un resultado negativo: las temporadas no viajan de norte a sur, y la regla de alerta temprana detecta cerca de 1 de cada 5 brotes, con una anticipación mediana de 6 semanas.",
       "details": [
         "Ordenado por casos en exceso cada 100.000 habitantes, para que las provincias grandes no encabecen la lista solo por serlo.",
         "El Gini ponderado por población y la superposición del decil superior separan la concentración del riesgo de la concentración de personas.",
@@ -177,7 +178,7 @@
     "case": {
       "problem": "Goal totals from different eras are not comparable: leagues score at different rates, and most player stats come without sources.",
       "approach": "An R targets pipeline where every number traces to a named source and every non-trivial transformation is a tested function. Goals per appearance are adjusted by the league's goals per match over each player's own seasons, with pointblank validation.",
-      "result": "A bilingual Shiny dashboard with six panels that states the less flattering finding: era-adjusted, Shearer ranks 4th among the ten highest career scorers, and his record rests on durability, not rate.",
+      "result": "A Shiny dashboard with six panels that states the less flattering finding: era-adjusted, Shearer ranks 4th among the ten highest career scorers, and his record rests on durability, not rate.",
       "details": [
         "Every number traces to a named source, and gaps in coverage are declared, never filled: 30% of goal types are 'unknown', not imputed.",
         "The era adjustment divides each rate by the league's goals per match over the player's own seasons. It is real but small: it narrows the gap to modern scorers, not the order.",
@@ -188,7 +189,7 @@
     "case_es": {
       "problem": "Los totales de goles de distintas épocas no son comparables: las ligas anotan a ritmos distintos y la mayoría de las estadísticas no citan fuentes.",
       "approach": "Un pipeline R con targets donde cada número se rastrea a una fuente con nombre y cada transformación no trivial es una función testeada. Los goles por partido se ajustan por los goles por partido de la liga durante las temporadas de cada jugador, con validación con pointblank.",
-      "result": "Un dashboard Shiny bilingüe de seis paneles que dice el hallazgo menos halagador: ajustado por época, Shearer es 4.º entre los diez máximos goleadores históricos, y su récord se apoya en la durabilidad, no en el ritmo.",
+      "result": "Un dashboard Shiny de seis paneles que dice el hallazgo menos halagador: ajustado por época, Shearer es 4.º entre los diez máximos goleadores históricos, y su récord se apoya en la durabilidad, no en el ritmo.",
       "details": [
         "Cada número se rastrea a una fuente con nombre, y los vacíos de cobertura se declaran, nunca se rellenan: el 30 % de los tipos de gol es «desconocido», no imputado.",
         "El ajuste por época divide cada tasa por los goles por partido de la liga durante las temporadas del jugador. Es real pero pequeño: achica la brecha con los goleadores modernos, no cambia el orden.",
@@ -272,23 +273,23 @@
   },
   "pbc-stage-prediction": {
     "title": "PBC Stage Prediction",
-    "description_es": "Estadificación no invasiva de colangitis biliar primaria (cohorte Mayo Clinic, 1974-84): pipeline sin fuga de datos, CV anidada, comparación con los puntajes Mayo y APRI, umbral de descarte, demo en Streamlit, bilingüe EN/ES",
+    "description_es": "Estadificación no invasiva de colangitis biliar primaria (cohorte Mayo Clinic, 1974-84): pipeline sin fuga de datos, CV anidada, comparación con los puntajes Mayo y APRI, umbral de descarte, demo en Streamlit",
     "category": "Machine Learning",
     "hidden": true
   },
   "agro-monitor-pampa": {
     "title": "Agro Monitor Pampa",
     "category": "Geospatial",
-    "description_es": "Monitorea cultivos de soja en la Pampa argentina con imágenes satelitales.",
+    "description_es": "Monitorea cultivos de soja y trigo en la Pampa argentina con imágenes satelitales.",
     "homepage": "https://agro-monitor-pampa.pages.dev",
     "screenshot": "https://agro-monitor-pampa.pages.dev/en/",
     "symbol": "eye",
-    "description": "Monitors soybean crops across the Argentine Pampas with satellite imagery.",
+    "description": "Monitors soybean and wheat crops across the Argentine Pampas with satellite imagery.",
     "screenshot_es": "https://agro-monitor-pampa.pages.dev/",
     "case": {
-      "problem": "How is this season's soybean crop doing today in each department compared with history on the same date, and what yield does that anticipate?",
-      "approach": "Sentinel-2 NDVI through openEO with INTA crop masks over 152 departments, and a leave-one-campaign-out validated yield model, always compared with an honest baseline: the department's historical mean.",
-      "result": "A free static site (SvelteKit + MapLibre) with anomaly maps and yield estimates with their out-of-sample error. The model improves on the baseline by 17% in a normal year and 35% counting the 2022/23 drought, and it does not win every campaign.",
+      "problem": "How are this season's soybean and wheat crops doing today in each department compared with history on the same date, and what yield does that anticipate?",
+      "approach": "Sentinel-2 NDVI through openEO with INTA crop masks over 152 soybean and about 150 wheat departments, and a leave-one-campaign-out validated yield model, always compared with an honest baseline: the department's historical mean.",
+      "result": "A free static site (SvelteKit + MapLibre) with anomaly maps, a soybean/wheat switch and yield estimates with their out-of-sample error. For soybean, the model improves on the baseline by 17% in a normal year and 35% counting the 2022/23 drought, and it does not win every campaign.",
       "details": [
         "Leave-one-campaign-out validation on 932 observations (137 departments, 7 campaigns from 2018/19 to 2024/25) against MAGyP yields.",
         "The 2022/23 drought weighs a lot: with only 7 campaigns and one drought, it can't be told whether the model gets droughts right or just learned that year.",
@@ -297,9 +298,9 @@
       ]
     },
     "case_es": {
-      "problem": "¿Cómo viene hoy la soja de la campaña en cada departamento frente a la historia en la misma fecha, y qué rendimiento anticipa?",
-      "approach": "NDVI de Sentinel-2 vía openEO con máscaras de cultivo del INTA sobre 152 departamentos, y un modelo de rendimiento validado leave-one-campaign-out, siempre comparado con una línea de base honesta: la media histórica del departamento.",
-      "result": "Un sitio estático gratuito (SvelteKit + MapLibre) con mapas de anomalías y estimaciones de rendimiento con su error fuera de muestra. El modelo mejora la línea de base un 17 % en un año normal y un 35 % contando la sequía 2022/23, y no gana todas las campañas.",
+      "problem": "¿Cómo vienen hoy la soja y el trigo de la campaña en cada departamento frente a la historia en la misma fecha, y qué rendimiento anticipa?",
+      "approach": "NDVI de Sentinel-2 vía openEO con máscaras de cultivo del INTA sobre 152 departamentos de soja y unos 150 de trigo, y un modelo de rendimiento validado leave-one-campaign-out, siempre comparado con una línea de base honesta: la media histórica del departamento.",
+      "result": "Un sitio estático gratuito (SvelteKit + MapLibre) con mapas de anomalías, un selector soja/trigo y estimaciones de rendimiento con su error fuera de muestra. En soja, el modelo mejora la línea de base un 17 % en un año normal y un 35 % contando la sequía 2022/23, y no gana todas las campañas.",
       "details": [
         "Validación leave-one-campaign-out sobre 932 observaciones (137 departamentos, 7 campañas de 2018/19 a 2024/25) contra rendimientos del MAGyP.",
         "La sequía 2022/23 pesa mucho: con solo 7 campañas y una sequía, no se puede saber si el modelo acierta las sequías o solo aprendió ese año.",
