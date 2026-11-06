@@ -315,9 +315,7 @@ Promise.all([get("data/projects.json"), get("data/experience.json"), get("data/o
       if (hidden) g.setAttribute("aria-hidden", "true");
       roles.forEach((r, i) => (r.logos && r.logos.length ? r.logos : [{ name: r.company }]).forEach((lg) => {
         const b = el("button", "logo-item");
-        b.type = "button"; b.style.setProperty("--c", color(i));
-        if (lg.ink) b.dataset.ink = lg.ink;
-        if (hidden) b.tabIndex = -1; else b.setAttribute("aria-label", `${lg.name}: ${r.title[lang()]}`);
+        b.type = "button"; b.style.setProperty("--c", color(i));        if (hidden) b.tabIndex = -1; else b.setAttribute("aria-label", `${lg.name}: ${r.title[lang()]}`);
         if (lg.file) {
           const m = el("span", "logo-mask"), img = el("img");
           img.src = `data/logos/${lg.file}`; img.alt = "";

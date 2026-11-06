@@ -11,8 +11,7 @@
       "logos": [
         {
           "name": "Compass",
-          "file": "compass.svg",
-          "ink": "dark"
+          "file": "compass.svg"
         }
       ]
     },
@@ -27,8 +26,7 @@
       "logos": [
         {
           "name": "Senpai Academy",
-          "file": "senpai.png",
-          "ink": "dark"
+          "file": "senpai.png"
         }
       ]
     },
@@ -43,13 +41,11 @@
       "logos": [
         {
           "name": "ArPOV",
-          "file": "arpov.png",
-          "ink": "dark"
+          "file": "arpov.png"
         },
         {
           "name": "Sembrá Evolución",
-          "file": "sembra.svg",
-          "ink": "light"
+          "file": "sembra.svg"
         }
       ]
     },
@@ -68,8 +64,7 @@
       "logos": [
         {
           "name": "witan nook",
-          "file": "witannook.png",
-          "ink": "dark"
+          "file": "witannook.png"
         }
       ]
     },
@@ -88,8 +83,7 @@
       "logos": [
         {
           "name": "Desafío Latam",
-          "file": "desafiolatam.png",
-          "ink": "dark"
+          "file": "desafiolatam.png"
         }
       ]
     },
@@ -112,8 +106,7 @@
         },
         {
           "name": "Launch Consulting Group",
-          "file": "launch.svg",
-          "ink": "dark"
+          "file": "launch.svg"
         }
       ]
     },
@@ -132,8 +125,7 @@
       "logos": [
         {
           "name": "Coderhouse",
-          "file": "coderhouse.png",
-          "ink": "dark"
+          "file": "coderhouse.png"
         }
       ]
     },
@@ -152,8 +144,7 @@
       "logos": [
         {
           "name": "Dabadaba",
-          "file": "dabadaba.png",
-          "ink": "dark"
+          "file": "dabadaba.png"
         }
       ]
     }
