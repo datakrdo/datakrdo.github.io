@@ -316,6 +316,7 @@ Promise.all([get("data/projects.json"), get("data/experience.json"), get("data/o
       roles.forEach((r, i) => (r.logos && r.logos.length ? r.logos : [{ name: r.company }]).forEach((lg) => {
         const b = el("button", "logo-item");
         b.type = "button"; b.style.setProperty("--c", color(i));
+        if (lg.ink) b.dataset.ink = lg.ink;
         if (hidden) b.tabIndex = -1; else b.setAttribute("aria-label", `${lg.name}: ${r.title[lang()]}`);
         if (lg.file) {
           const m = el("span", "logo-mask"), img = el("img");
@@ -327,7 +328,7 @@ Promise.all([get("data/projects.json"), get("data/experience.json"), get("data/o
         b.addEventListener("mouseenter", on); b.addEventListener("focus", on);
         b.addEventListener("click", () => { // click pauses; click again on the same logo resumes
           const resume = marquee.classList.contains("is-paused") && b.getAttribute("aria-pressed") === "true";
-          on(); marquee.classList.toggle("is-paused", !resume);
+          on(); marquee.classList.toggle("is-paused", !resume); marquee.classList.toggle("is-playing", resume);
         });
         g.append(b);
       }));
@@ -336,6 +337,7 @@ Promise.all([get("data/projects.json"), get("data/experience.json"), get("data/o
     const belt = el("div", "logo-track");
     belt.append(group(false), group(true));
     marquee.replaceChildren(belt);
+    marquee.onmouseleave = () => marquee.classList.remove("is-playing"); // hover pauses again after leaving
     if (roles.length) show(roles[0], 0);
   }
 
