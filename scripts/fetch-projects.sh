@@ -93,7 +93,7 @@ for name in $(jq -r '.[].name' "$DATA/projects.json"); do
     for lang in en es; do
       sfx=""; [ "$lang" = es ] && sfx="_es"
       gk() { v=$(jq -r --arg n "$name" --argjson i "$i" --arg k "$1$sfx" '.[$n].gallery[$i][$k] // empty' "$DATA/overrides.json"); [ -n "$v" ] || v=$(jq -r --arg n "$name" --argjson i "$i" --arg k "$1" '.[$n].gallery[$i][$k] // empty' "$DATA/overrides.json"); echo "$v"; }
-      src=$(gk src); file=$(gk file); url=$(gk screenshot); cap=$(gk caption)
+      src=$(gk src); file=$(gk file); url=$(gk screenshot); cap=$(gk caption); dfile=$(gk dark_file)
       base="$name-g$i-$lang"; light=""; dark=""
       if [ -n "$file" ]; then
         ext="${file##*.}"; shrinkg "$DATA/static/$file" "$DATA/img/$base.$ext" && light="data/img/$base.$ext" && dark="$light"
@@ -102,7 +102,12 @@ for name in $(jq -r '.[].name' "$DATA/projects.json"); do
         curl -fsSL "https://raw.githubusercontent.com/$USER_LOGIN/$name/HEAD/$src" -o "$DATA/img/$base.raw" \
           && shrinkg "$DATA/img/$base.raw" "$DATA/img/$base.$ext" && light="data/img/$base.$ext" && dark="$light"
         rm -f "$DATA/img/$base.raw"
-      elif [ -n "$url" ]; then
+      fi
+      # dark_file: dark picture kept in data/static for charts that were drawn on a light background (see scripts/darken.py)
+      if [ -n "$dfile" ] && [ -n "$light" ]; then
+        ext="${dfile##*.}"; shrinkg "$DATA/static/$dfile" "$DATA/img/$base-dark.$ext" && dark="data/img/$base-dark.$ext"
+      fi
+      if [ -n "$url" ] && [ -z "$file$src" ]; then
         for theme in light dark; do
           if cached "$DATA/img/$base-$theme.png"; then
             [ "$theme" = light ] && light="data/img/$base-light.png" || dark="data/img/$base-dark.png"; continue

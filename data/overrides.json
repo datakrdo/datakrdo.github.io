@@ -207,16 +207,19 @@
     "gallery": [
       {
         "src": "output/figures/06_comparators.png",
+        "dark_file": "gallery-shearer-comparators-dark.png",
         "caption": "Era-adjusted scoring rate among the ten highest career scorers.",
         "caption_es": "Ritmo goleador ajustado por época entre los diez máximos goleadores."
       },
       {
         "src": "output/figures/05_context.png",
+        "dark_file": "gallery-shearer-context-dark.png",
         "caption": "Context of each goal at the moment it was scored.",
         "caption_es": "Contexto de cada gol en el momento en que se marcó."
       },
       {
         "src": "output/figures/04_goal_types.png",
+        "dark_file": "gallery-shearer-goal-types-dark.png",
         "caption": "Goal type, with the unknown coverage declared instead of imputed.",
         "caption_es": "Tipo de gol, declarando la cobertura desconocida en lugar de imputarla."
       }
@@ -261,11 +264,13 @@
     "gallery": [
       {
         "file": "gallery-fraud-threshold.png",
+        "dark_file": "gallery-fraud-threshold-dark.png",
         "caption": "Net savings and alert volume against the decision threshold.",
         "caption_es": "Ahorro neto y volumen de alertas según el umbral de decisión."
       },
       {
         "file": "gallery-fraud-shap.png",
+        "dark_file": "gallery-fraud-shap-dark.png",
         "caption": "Top 10 features by mean |SHAP|.",
         "caption_es": "Las 10 variables principales por |SHAP| medio."
       }
