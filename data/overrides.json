@@ -36,7 +36,8 @@
     },
     "gallery": [
       {
-        "src": "docs/img/albums.png",
+        "screenshot": "https://datakrdo.github.io/lyric-emotion/",
+        "scroll": "#albums",
         "caption": "Album by album: where each album sits on the brightness scale, The Cure and The Smiths.",
         "caption_es": "Álbum por álbum: dónde cae cada disco en la escala de brillo, The Cure y The Smiths."
       },
