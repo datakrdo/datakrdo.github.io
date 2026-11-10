@@ -78,7 +78,7 @@ for name in $(jq -r '.[].name' "$DATA/projects.json"); do
     fi
   done
 done
-# Gallery: overrides[<name>].gallery items, each with src (path in the repo) | file (in data/static) | screenshot (+ scroll),
+# Gallery: overrides[<name>].gallery items, each with src (path in the repo, optional light_src = its light twin) | file (in data/static) | screenshot (+ scroll),
 # optional *_es variants and caption/caption_es. Result: projects.json gallery.<lang>[] = {light, dark, caption}.
 gallery='{}'
 shrinkg() { # <in> <out>: gallery pictures keep up to 1600 px so dense charts stay readable
@@ -102,6 +102,14 @@ for name in $(jq -r '.[].name' "$DATA/projects.json"); do
         curl -fsSL "https://raw.githubusercontent.com/$USER_LOGIN/$name/HEAD/$src" -o "$DATA/img/$base.raw" \
           && shrinkg "$DATA/img/$base.raw" "$DATA/img/$base.$ext" && light="data/img/$base.$ext" && dark="$light"
         rm -f "$DATA/img/$base.raw"
+        # light_src: light twin inside the repo; src then serves the dark one
+        lsrc=$(gk light_src)
+        if [ -n "$lsrc" ] && [ -n "$light" ]; then
+          lext="${lsrc##*.}"
+          curl -fsSL "https://raw.githubusercontent.com/$USER_LOGIN/$name/HEAD/$lsrc" -o "$DATA/img/$base-light.raw" \
+            && shrinkg "$DATA/img/$base-light.raw" "$DATA/img/$base-light.$lext" && light="data/img/$base-light.$lext" || echo "gallery image missing: $name/$lsrc" >&2
+          rm -f "$DATA/img/$base-light.raw"
+        fi
       fi
       # dark_file: dark picture kept in data/static for charts that were drawn on a light background (see scripts/darken.py)
       if [ -n "$dfile" ] && [ -n "$light" ]; then

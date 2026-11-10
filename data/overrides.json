@@ -103,10 +103,18 @@
     },
     "gallery": [
       {
+        "src": "docs/img/report_en.gif",
+        "src_es": "docs/img/report_es.gif",
+        "light_src": "docs/img/report_en_light.gif",
+        "light_src_es": "docs/img/report_es_light.gif",
+        "caption": "Tour of the Power BI report: overview, map, ranking, corridor, Oregon, demographics and quality.",
+        "caption_es": "Recorrido del reporte de Power BI: resumen, mapa, ranking, corredor, Oregon, demografía y calidad."
+      },
+      {
         "src": "docs/img/cover_en.gif",
         "src_es": "docs/img/cover_es.gif",
-        "caption": "Cover page of the Power BI report.",
-        "caption_es": "Portada del reporte de Power BI."
+        "caption": "Static demo of the MCP: example questions answered in the browser from the same data.",
+        "caption_es": "Demo estática del MCP: preguntas de ejemplo respondidas en el navegador con los mismos datos."
       }
     ]
   },
