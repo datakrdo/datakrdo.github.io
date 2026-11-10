@@ -42,17 +42,20 @@
         "caption_es": "Álbum por álbum: dónde cae cada disco en la escala de brillo, The Cure y The Smiths."
       },
       {
-        "src": "output/figures/emotion_distribution.png",
+        "src": "output/figures/emotion_distribution_dark.png",
+        "light_src": "output/figures/emotion_distribution.png",
         "caption": "Emotion distribution by artist.",
         "caption_es": "Distribución de emociones por artista."
       },
       {
-        "src": "output/figures/valence_timeseries.png",
+        "src": "output/figures/valence_timeseries_dark.png",
+        "light_src": "output/figures/valence_timeseries.png",
         "caption": "Valence by year, with 95% bootstrap intervals.",
         "caption_es": "Valencia por año, con intervalos bootstrap del 95 %."
       },
       {
-        "src": "output/figures/emotion_heatmap.png",
+        "src": "output/figures/emotion_heatmap_dark.png",
+        "light_src": "output/figures/emotion_heatmap.png",
         "caption": "Mean probability of each emotion, album by album.",
         "caption_es": "Probabilidad media de cada emoción, álbum por álbum."
       }
